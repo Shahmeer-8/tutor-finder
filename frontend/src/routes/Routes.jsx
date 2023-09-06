@@ -6,7 +6,6 @@ import Blog from "../pages/Blog";
 import MyProfile from "../pages/MyProfile";
 import MySessions from "../pages/MySessions";
 import Session from "../pages/Session";
-import Verify from "../pages/Verify";
 import Login from "../pages/auth/Login";
 import Layout from "../components/common/Layout";
 import TermTutors from "@/pages/TermTutors";
@@ -100,8 +99,6 @@ const AppRoutes = () => {
             </Layout>
           }
         />
-
-        <Route path="/verify" element={<Verify />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
