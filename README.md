@@ -1,6 +1,6 @@
 # <p align='center'> Tutor Finder </p>
 
-TutorFinder - is a platform dedicated to connecting students with qualified home and online tutors across Pakistan. Their primary focus is to provide personalized tutoring services in major cities such as Lahore, Islamabad, and Karachi, covering a wide range of subjects and educational levels.
+**TutorFinder** - is a platform dedicated to connecting students with qualified home and online tutors across Pakistan. Their primary focus is to provide personalized tutoring services in major cities such as Lahore, Islamabad, and Karachi, covering a wide range of subjects and educational levels.
 
 The platform ensures that each tutor undergoes a verification process, including interviews and profile overviews, to maintain quality and trust. Additionally, It offers a two-day free trial for students to assess the compatibility and teaching style of the tutor before committing.
 
@@ -10,19 +10,19 @@ Overall, aims to facilitate effective learning by bridging the gap between stude
 
 
 ### FrontEnd Requirements:
-    - User Interface:
-          - NavBar
-          - Home Page
-          - About Page
-          - Tutor Page
-          - Footer
-          - Terms & Condition For Tutors
-          - Terms & Condition For Students
-
-     - Authentication:
-          - Signup Page for Tutors
-          - Login Page
-          - Forget Password Page
+- **User Interface**
+  - NavBar
+  - Home Page
+  - About Page
+  - Tutor Page
+  - Footer
+  - Terms & Condition For Tutors
+  - Terms & Condition For Students
+  - 
+  - **Authentication**:
+    - Signup Page for Tutors
+    - Login Page
+    - Forget Password Page
 
      - User Module:
           - View Tutors (from Tutor Page)
