@@ -35,6 +35,14 @@ Overall, aims to facilitate effective learning by bridging the gap between stude
   - List of Courses (CRUD)
   - List of Inquires/requests (Read)
   - Modify/Update Profile
+ 
+**Admin Module**
+- Login
+- Dashboard
+  - Tutor List
+  - Blocked Tutors List
+  - Courses List
+  - Inquires/Requests List
 
 **Reference**:
   - https://github.com/sikander-nawaz/TutorFinder-UI.git 
