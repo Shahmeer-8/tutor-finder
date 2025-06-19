@@ -44,13 +44,13 @@ Overall, aims to facilitate effective learning by bridging the gap between stude
   - Courses List
   - Inquires/Requests List
 
-**Reference**:
+**Reference**
   - https://github.com/sikander-nawaz/TutorFinder-UI.git 
   - Documentation (read chapter 6 for frontend)
   - Run project for Tutor and Admin Dashbpard Panel (on your local server)
   - Additional Reference: [TheTutors.pk](https://thetutors.pk/)
 
-**Note**: 
+**Note**
   - Don't push code directly in `main` branch. Always use your own created branch to add code in this repo.
   - Your code will be merged after a detailed review.
   - You can change Frontend/UI according to your expertise for a batter experince.
