@@ -12,7 +12,29 @@ Overall, aims to facilitate effective learning by bridging the gap between stude
 
 **User Interface**
 - NavBar
+- Home Page
+- About Page
+- Tutor Page
+- Footer
+- Terms & Condition For Tutors
+- Terms & Condition For Students
 
+**Authentication**
+- Signup Page for Tutors
+- Login Page
+- Forget Password Page
+
+**User Module**
+- View Tutors (from Tutor Page)
+- View Tutor Details
+- Send Inquiry
+
+**Tutor Module**
+- SignUp/Login
+- Dashboard
+  - List of Courses (CRUD)
+  - List of Inquires/requests (Read)
+  - Modify/Update Profile
 
 **Reference**:
   - https://github.com/sikander-nawaz/TutorFinder-UI.git 
