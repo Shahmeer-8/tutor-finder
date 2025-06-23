@@ -11,13 +11,13 @@ Overall, aims to facilitate effective learning by bridging the gap between stude
 ## Frontend Requirements:
 
 **User Interface**
-- NavBar
+- NavBar 
 - Home Page
 - About Page
 - Tutor Page
 - Footer
-- Terms & Condition For Tutors
-- Terms & Condition For Students
+- Terms & Conditions for Tutors
+- Terms & Conditions For Students
 
 **Authentication**
 - Signup Page for Tutors
@@ -47,10 +47,10 @@ Overall, aims to facilitate effective learning by bridging the gap between stude
 **Reference**
   - https://github.com/sikander-nawaz/TutorFinder-UI.git 
   - Documentation (read chapter 6 for frontend)
-  - Run project for Tutor and Admin Dashbpard Panel (on your local server)
-  - Additional Reference: [TheTutors.pk](https://thetutors.pk/)
+  - Run project for Tutor and Admin Dashboard Panel (on your local server)
+  - Additional Reference: [TheTutors.pk](https://thetutors.pk/), [Tutorer](https://tutorer.com/)
 
 **Note**
   - Don't push code directly in `main` branch. Always use your own created branch to add code in this repo.
   - Your code will be merged after a detailed review.
-  - You can change Frontend/UI according to your expertise for a batter experince.
+  - You can change Frontend/UI according to your expertise for a better experience.
