@@ -53,4 +53,4 @@ Overall, aims to facilitate effective learning by bridging the gap between stude
 **Note**
   - Don't push code directly in `main` branch. Always use your own created branch to add code in this repo.
   - Your code will be merged after a detailed review.
-  - You can change Frontend/UI according to your expertise for a better experience
+  - You can change Frontend/UI according to your expertise for a better experience.
