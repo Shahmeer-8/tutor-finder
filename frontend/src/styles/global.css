@@ -131,6 +131,7 @@
 --font-secondary: 'Inter';
   --breakpoint-xs: 400px;
   --animate-spin:  spin 20s linear infinite;
+  --shadow-custom: 0 25px 50px -12px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05)
   
   
 }

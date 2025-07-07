@@ -23,7 +23,7 @@ const Subjects = () => {
             key={i}
             onClick={() => scrollTo(0, 0)}
             to={`/tutors/${subject.name}`}
-            className="flex items-center justify-center flex-col bg-white backdrop-blur-md border border-deep/30 rounded-xl h-28 w-40 transition-all duration-300 hover:bg-secondary hover:scale-105"
+            className="flex items-center justify-center flex-col bg-white backdrop-blur-md border border-deep/30 rounded-xl h-35 w-40 transition-all duration-300 hover:bg-secondary hover:scale-105 shadow-custom"
           >
             <img
               src={subject.image}
@@ -31,7 +31,7 @@ const Subjects = () => {
               height={55}
               width={55}
             />
-            <h5 className="text-sm md:text-sm mb-2 font-semibold mt-3">
+            <h5 className="text-sm md:text-sm mb-2 font-bold mt-3 font-secondary text-deep">
               {subject.name}
             </h5>
           </Link>
