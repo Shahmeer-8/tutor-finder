@@ -28,12 +28,12 @@ const MainHeader = () => {
   };
 
   return (
-    <header className="absolute top-0 left-0 right-0 z-50 w-full bg-deep text-white py-3">
-      <div className="mx-auto max-w-[1440px] px-6 lg:px-12 flex items-center justify-between">
+    <header className="sticky top-0 z-50 w-full bg-deep/90 backdrop-blur-md text-white py-3 shadow-md border-b border-deep/50">
+      <div className="mx-auto max-w-[1440px] px-6 lg:px-12 flex items-center justify-between font-primary">
         {/* Logo */}
         <Link
           to="/"
-          className="text-[24px] font-bold leading-[120%] flex items-center gap-x-1"
+          className="text-[22px] font-bold leading-[120%] flex items-center gap-x-1"
         >
           <span className="inline-flex items-center justify-center p-2 h-8 w-8 bg-secondary text-tertiary rotate-[-31deg] rounded-full">
             T
@@ -78,12 +78,18 @@ const MainHeader = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem asChild>
-                  <Link to="/my-profile" className="cursor-pointer hover:text-deep">
+                  <Link
+                    to="/my-profile"
+                    className="cursor-pointer hover:text-deep"
+                  >
                     My Profile
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/my-sessions" className="cursor-pointer hover:text-deep">
+                  <Link
+                    to="/my-sessions"
+                    className="cursor-pointer hover:text-deep"
+                  >
                     My Sessions
                   </Link>
                 </DropdownMenuItem>
@@ -108,7 +114,7 @@ const MainHeader = () => {
         toggleMenu={toggleMenu}
         containerStyles={`${
           menuOpened ? "flex" : "hidden"
-        } xl:hidden absolute top-0 left-0 h-screen w-[230px] flex-col gap-y-6 px-6 pt-8 z-50 bg-white/10 backdrop-blur-md text-deep`}
+        } xl:hidden absolute top-0 left-0 h-screen w-[230px] flex-col gap-y-6 px-6 pt-8 z-50 bg-deep/90 backdrop-blur-md text-white border-r border-white/10 shadow-lg`}
       />
     </header>
   );

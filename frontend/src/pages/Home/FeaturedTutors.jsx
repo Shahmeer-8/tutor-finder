@@ -11,43 +11,14 @@ const FeaturedTutors = () => {
   return (
 
 
-    <section className="mx-auto max-w-7xl px-6 lg:px-12 py-16 xl:py-20">
+    <section className="mx-auto max-w-7xl px-6 lg:px-12 py-16 xl:py-20 font-primary">
       {/* Header Section */}
       <div className="max-w-4xl mx-auto text-center pb-16">
-        {/* Title with Avatars */}
-        <div className="inline-flex items-center justify-center gap-6 flex-wrap font-bold text-2xl md:text-3xl lg:text-4xl text-gray-900 mb-4">
-          <span>Made For Professionals</span>
-          {/* Overlapping Avatars */}
-          <div className="flex -space-x-3">
-            <div className="w-12 h-12 rounded-full ring-4 ring-white shadow-lg overflow-hidden">
-              <img
-                src={tutorFemale}
-                alt="Professional tutor"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="w-12 h-12 rounded-full ring-4 ring-white shadow-lg overflow-hidden">
-              <img
-                src={tutorFemale}
-                alt="Professional tutor"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="w-12 h-12 rounded-full ring-4 ring-white shadow-lg overflow-hidden">
-              <img
-                src={tutorFemale}
-                alt="Professional tutor"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </div>
-        </div>
-
-        <h1 className="text-4xl md:text-5xl  font-bold text-gray-900 mb-6">
+        <h1 className="text-4xl md:text-5xl font-bold text-deep mb-6 font-primary">
           Delivering Quality Education
         </h1>
 
-        <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+        <p className="text-lg md:text-md text-gray-600 max-w-3xl mx-auto leading-relaxed">
           Our platform is designed to empower professional tutors who are
           passionate about sharing knowledge and shaping futures through
           personalized education.

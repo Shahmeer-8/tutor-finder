@@ -7,17 +7,17 @@ const MainFooter = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Logo and Description */}
-          <div className="col-span-1 md:col-span-2">
+          <div className="col-span-1 md:col-span-2 font-primary">
             <Link
               to="/"
               className="text-[24px] font-bold leading-[120%] flex items-center gap-x-1"
             >
-              <span className="inline-flex items-center justify-center p-2 h-8 w-8 bg-secondary text-tertiary rotate-[-31deg] rounded-full">
+              <span className=" inline-flex items-center justify-center p-2 h-8 w-8 bg-secondary text-tertiary rotate-[-31deg] rounded-full">
                 T
               </span>
               utorFinder
             </Link>
-            <p className="text-gray-300 mb-4 max-w-md mt-5">
+            <p className="text-gray-300 mb-4 max-w-md mt-5 font-secondary">
               Connecting students with qualified tutors across Pakistan. Quality
               education with personalized attention in anywhere.
             </p>
@@ -41,8 +41,8 @@ const MainFooter = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
-            <ul className="space-y-2">
+            <h3 className="text-lg font-bold mb-4 font-primary">Quick Links</h3>
+            <ul className="space-y-2 font-secondary">
               <li>
                 <Link to="/" className="text-gray-300 hover:text-secondary">
                   About Us
@@ -85,8 +85,8 @@ const MainFooter = () => {
 
           {/* Contact Info */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
-            <ul className="space-y-2">
+            <h3 className="text-lg font-bold mb-4 font-primary">Contact Us</h3>
+            <ul className="space-y-2 font-secondary">
               <li className="flex items-center space-x-2">
                 <Mail className="h-4 w-4 text-gray-400" />
                 <a
@@ -121,10 +121,10 @@ const MainFooter = () => {
             </ul>
           </div>
         </div>
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center">
+        <div className="border-t border-gray-800 mt-8 pt-8 text-center font-primary">
           <p className="text-gray-400">
             © {new Date().getFullYear()}{" "}
-            <span className="text-secondary">TutorFinder </span> All rights
+            <span className="text-secondary font-primary font-semibold">TutorFinder </span> All rights
             reserved.
           </p>
         </div>

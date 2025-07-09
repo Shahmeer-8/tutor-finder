@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
 
 @import "tailwindcss";
 
@@ -117,17 +117,19 @@
 @theme {
   --color-primary: #f9f9f9;
   --color-secondary: #e2f047;
+  --color-secondary-500: #c7d93e;
+  --color-secondary-400: #f2fa94;
   --color-tertiary: #404040;
-  --color-deep: #0b4c53;
+  --color-deep: #162d71;
   --color-light: #f9fbfc;
   --color-gray-10: #eeeeee; 
   --color-gray-20: #a2a2a2;
   --color-gray-30: #787878;
   --color-gray-50: #585858;
   --color-gray-90: #141414;
-
+  --font-primary: 'Raleway';
+--font-secondary: 'Inter';
   --breakpoint-xs: 400px;
-  --bg-hero: "url('/src/assets/BG-image.png')";
   --animate-spin:  spin 20s linear infinite;
   
   

@@ -7,9 +7,9 @@ import { AppContext } from "../context/AppContext";
 const Blog = () => {
   const { blogs} = useContext(AppContext);
   return (
-    <div className="py-28 mx-auto max-w-[1440px] px-6 lg:px-12">
+    <div className="py-15 mx-auto max-w-[1440px] px-6 lg:px-12 mb-5">
       <div className="max-w-7xl mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold mb-8 text-center">Latest Blog Articles</h1>
+      <h1 className="text-3xl font-bold mb-8 text-center font-primary text-deep">Latest Blog Articles</h1>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {blogs.map((blog, index) => (
@@ -24,7 +24,7 @@ const Blog = () => {
             />
 
             <div className="p-4 flex-1 flex flex-col">
-              <h2 className="text-xl font-semibold mb-2">{blog.title}</h2>
+              <h2 className="text-md font-bold mb-2 font-primary text-deep">{blog.title}</h2>
               <p className="text-sm text-gray-500 mb-1">{blog.category}</p>
               <div className="flex items-center justify-between text-sm text-gray-600 mt-auto">
                 <span className="flex items-center gap-1">

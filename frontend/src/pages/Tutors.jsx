@@ -27,15 +27,15 @@ export default function Tutors() {
 
   return (
     <div className="w-full overflow-x-hidden">
-      <div className="py-28 mx-auto max-w-[1440px] px-6 lg:px-12">
+      <div className="py-15 mx-auto max-w-[1440px] px-6 lg:px-12">
         {/* Hero Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           {/* Left: Text */}
           <div className="max-w-xl mx-auto md:mx-0 text-center md:text-left">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-deep font-primary">
               Unlock Your Potential with Skilled Tutors
             </h2>
-            <p className="text-md md:text-lg text-gray-600 leading-relaxed">
+            <p className="text-md md:text-lg text-gray-600 leading-relaxed font-secondary">
               Our platform is designed to empower professional tutors who are
               passionate about sharing knowledge and shaping futures through
               personalized education.
@@ -48,7 +48,7 @@ export default function Tutors() {
             <div className="absolute top-1/2 left-1/2 w-24 h-24 md:w-40 md:h-40 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center z-20">
               <Link
                 to="/"
-                className="text-[24px] font-bold leading-[120%] flex items-center gap-x-1 text-tertiary"
+                className="text-[24px] font-bold leading-[120%] flex items-center gap-x-1 text-deep"
                 aria-label="TutorFinder Home"
               >
                 <span className="inline-flex items-center justify-center p-2 h-8 w-8 bg-secondary text-tertiary rotate-[-31deg] rounded-full">
@@ -89,7 +89,7 @@ export default function Tutors() {
         </div>
 
         {/* Filters Button (visible only on small screens) */}
-        <div className="mt-10 sm:hidden flex justify-center">
+        <div className="mt-10 sm:hidden flex justify-center font-secondary" >
           <Button
             variant="secondary"
             size="lg"
@@ -111,9 +111,9 @@ export default function Tutors() {
               onClick={() => handleSubjectClick(subject.name)}
               key={i}
               variant="secondary"
-              className={`w-full sm:w-auto px-8 cursor-pointer transition-all duration-300 ${
+              className={`w-full sm:w-auto px-8 cursor-pointer transition-all duration-300 font-secondary text-deep ${
                 subject.name === subjectParam
-                  ? "bg-deep text-white hover:bg-deep/80"
+                  ? "bg-deep text-white hover:bg-deep/80 font-secondary"
                   : ""
               }`}
             >
@@ -137,7 +137,7 @@ export default function Tutors() {
               <img
                 src={tutor.image || "/placeholder.svg"}
                 alt={tutor.name}
-                className="w-24 h-24 rounded-full object-cover border-4 border-secondary mb-4"
+                className="w-24 h-24 rounded-full object-cover border-4 border-secondary mb-4 "
               />
               {/* Optional Verified Badge */}
               {tutor.verified && (
@@ -147,7 +147,7 @@ export default function Tutors() {
               )}
             </div>
             {/* Name & Subject */}
-            <h3 className="text-xl md:text-2xl font-semibold text-deep">
+            <h3 className="text-xl md:text-2xl font-bold text-deep font-primary">
               {tutor.name}
             </h3>
             <p className="text-md text-tertiary mt-1">{tutor.subject}</p>

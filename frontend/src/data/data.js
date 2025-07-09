@@ -4,17 +4,17 @@ import chemistry from "@/assets/subjects/chemistry.svg";
 import english from "@/assets/subjects/english.svg";
 import computer from "@/assets/subjects/computer.svg";
 import economics from "@/assets/subjects/economics.svg";
-import accounting from "@/assets/subjects/accounting.svg";
+import coding from "@/assets/subjects/coding.svg";
 
 // Subject icons for reuse (optional)
 export const subjectData = [
+  { name: "Economics", image: economics },
   { name: "Mathematics", image: math },
   { name: "Physics", image: physics },
+  { name: "Computer", image: computer },
   { name: "Chemistry", image: chemistry },
   { name: "English", image: english },
-  { name: "Computer", image: computer },
-  { name: "Economics", image: economics },
-  { name: "Accounting", image: accounting },
+  { name: "Programming", image: coding },
 ];
 
 // 👨‍🏫 Tutor data
