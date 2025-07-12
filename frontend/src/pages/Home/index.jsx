@@ -6,6 +6,8 @@ import FeaturedTutors from './FeaturedTutors'
 import HowItWorks from './HowItWorks'
 import { Stats } from './stats'
 import Testimonials from './Testimonials'
+import Becomeatutor from './Becomeatutor'
+import FaqSection from './FaqSection'
 
 const Home = () => {
   return (
@@ -17,6 +19,8 @@ const Home = () => {
    <Stats/>
    <HowItWorks/>
    <Testimonials/>
+   <FaqSection/>
+   <Becomeatutor/>
    </>
   )
 }
