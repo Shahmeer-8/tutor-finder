@@ -1,47 +1,39 @@
-import  { useContext } from "react";
+import { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { AdminContext } from "../../context/AdminContext";
-import {
-  LayoutDashboard,
-  BookOpenCheck,
-  Users,
-  UserPlus,
-  LogOut,
-} from "lucide-react";
-import { AppContext } from "../../context/AppContext";
+import { TutorContext } from "../../../context/TutorContext";
+import { LayoutDashboard, Calendar, LogOut, User } from "lucide-react";
+import { AppContext } from "../../../context/AppContext";
 
 const navItems = [
   {
-    to: "/admin-dashboard",
+    to: "/tutor-dashboard",
     label: "Dashboard",
     icon: <LayoutDashboard className="w-5 h-5" />,
   },
   {
-    to: "/all-sessions",
-    label: "Sessions",
-    icon: <BookOpenCheck className="w-5 h-5" />,
+    to: "/tutor-sessions",
+    label: "MySessions",
+    icon: <Calendar className="w-5 h-5" />,
   },
   {
-    to: "/tutors-list",
-    label: "Tutors List",
-    icon: <Users className="w-5 h-5" />,
-  },
-  {
-    to: "/add-tutor",
-    label: "Add Tutor",
-    icon: <UserPlus className="w-5 h-5" />,
+    to: "/tutor-profile",
+    label: "MyProfile",
+    icon: <User className="w-5 h-5" />,
   },
 ];
 
-const AdminSidebar = ({ onNavItemClick }) => {
-  const { atoken, setAtoken } = useContext(AdminContext);
-  const {navigate} = useContext(AppContext);
+const TutorSidebar = ({ onNavItemClick }) => {
+  const { tutorToken, setTutorToken } = useContext(TutorContext);
+  const { navigate } = useContext(AppContext);
+
   // Logout Function
-  const logout = ()=>{
-    navigate('/')
-    atoken && setAtoken('')
-    atoken && localStorage.removeItem('atoken')
-  }
+  const logout = () => {
+    navigate("/login");
+    if (tutorToken) {
+      setTutorToken("");
+      localStorage.removeItem("tutorToken");
+    }
+  };
 
   const handleNavClick = () => {
     if (window.innerWidth < 1024) {
@@ -64,11 +56,11 @@ const AdminSidebar = ({ onNavItemClick }) => {
           utorFinder
         </div>
         <span className="text-xs bg-secondary text-tertiary mt-1 px-2 rounded-xl w-max">
-          {atoken ? "For Admin" : "For Tutor"}
+          {tutorToken ? "For Tutor" : "For Admin"}
         </span>
       </Link>
 
-      {atoken && (
+      {tutorToken && (
         <nav className="flex flex-col space-y-4 h-screen">
           {navItems.map(({ to, label, icon }, index) => (
             <NavLink
@@ -96,10 +88,23 @@ const AdminSidebar = ({ onNavItemClick }) => {
             <LogOut className="w-5 h-5" />
             Logout
           </button>
+
+          {/* User Info */}
+          <div className="p-4 border-t border-gray-10">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center">
+                <User size={20} className="text-tertiary" />
+              </div>
+              <div>
+                <p className="font-medium text-white text-sm">Sarah Johnson</p>
+                <p className="text-gray-20 text-xs">Mathematics Tutor</p>
+              </div>
+            </div>
+          </div>
         </nav>
       )}
     </aside>
   );
 };
 
-export default AdminSidebar;
+export default TutorSidebar;

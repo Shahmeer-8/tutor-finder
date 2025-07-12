@@ -1,5 +1,4 @@
 import React from 'react'
-
 import Subjects from './Subjects'
 import HeroSection from './HeroSection'
 import Feature from './Feature'
