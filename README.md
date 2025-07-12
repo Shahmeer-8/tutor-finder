@@ -13,7 +13,7 @@ Overall, aims to facilitate effective learning by bridging the gap between stude
 **User Interface**
 - NavBar 
 - Home Page
-- About Page
+- About Page (🚩)
 - Tutor Page
 - Footer
 - Terms & Conditions for Tutors
