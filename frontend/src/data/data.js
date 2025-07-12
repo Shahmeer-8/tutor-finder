@@ -232,7 +232,7 @@ export const blogs = [
   },
   {
     title: "How to Build Trust with Your Students",
-    image: "https://cdn.fs.teachablecdn.com/fAqSr6Z0QG2BNrTbdcfa",
+    image: "https://www.workstyle.io/img/blog/team-trust-building-activities/image3.jpg",
     writer: "Mr. Imran Shah",
     category: "Teaching Tips",
     date: "2025-04-09",
