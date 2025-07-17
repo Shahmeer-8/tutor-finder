@@ -2,15 +2,15 @@ import React from 'react'
 
 const TermStudents = () => {
   return (
-    <section className='py-28 mx-auto max-w-[1440px] px-6 lg:px-12"'>
+    <section className='py-28 mx-auto max-w-[1440px] px-6 lg:px-12 font-secondary"'>
        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <h1 className="text-4xl font-bold text-gray-900 mb-8">Terms & Conditions for Students</h1>
+        <h1 className="text-4xl font-bold text-deep mb-8 font-primary">Terms & Conditions for Students</h1>
 
         <div className="prose prose-lg max-w-none">
           <p className="text-lg text-gray-600 mb-8">Last updated: July 01, 2025</p>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">1. Acceptance of Terms</h2>
+            <h2 className="text-2xl font-bold text-deep mb-4 font-primary">1. Acceptance of Terms</h2>
             <p className="text-gray-700 mb-4">
               By accessing and using TutorFinder's services, you accept and agree to be bound by the terms and provision
               of this agreement. If you do not agree to abide by the above, please do not use this service.
@@ -18,7 +18,7 @@ const TermStudents = () => {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">2. Service Description</h2>
+            <h2 className="text-2xl font-bold text-deep mb-4 font-primary">2. Service Description</h2>
             <p className="text-gray-700 mb-4">
               TutorFinder is a platform that connects students with qualified tutors across Pakistan. We provide:
             </p>
@@ -31,7 +31,7 @@ const TermStudents = () => {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">3. Student Responsibilities</h2>
+            <h2 className="text-2xl font-bold text-deep mb-4 font-primary">3. Student Responsibilities</h2>
             <p className="text-gray-700 mb-4">As a student using our platform, you agree to:</p>
             <ul className="list-disc pl-6 text-gray-700 mb-4">
               <li>Provide accurate and truthful information</li>
@@ -44,7 +44,7 @@ const TermStudents = () => {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">4. Free Trial Period</h2>
+            <h2 className="text-2xl font-bold text-deep mb-4 font-primary">4. Free Trial Period</h2>
             <p className="text-gray-700 mb-4">
               We offer a 2-day free trial period for new students to assess tutor compatibility. During this period:
             </p>
@@ -57,7 +57,7 @@ const TermStudents = () => {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">5. Payment Terms</h2>
+            <h2 className="text-2xl font-bold text-deep mb-4 font-primary">5. Payment Terms</h2>
             <p className="text-gray-700 mb-4">
               Payment terms are established between students and tutors. TutorFinder may facilitate payments but is not
               responsible for payment disputes between parties.
@@ -65,7 +65,7 @@ const TermStudents = () => {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">6. Privacy and Data Protection</h2>
+            <h2 className="text-2xl font-bold text-deep mb-4 font-primary">6. Privacy and Data Protection</h2>
             <p className="text-gray-700 mb-4">
               We are committed to protecting your privacy. Personal information collected is used solely for providing
               our services and will not be shared with third parties without consent.
@@ -73,7 +73,7 @@ const TermStudents = () => {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">7. Limitation of Liability</h2>
+            <h2 className="text-2xl font-bold text-deep mb-4 font-primary">7. Limitation of Liability</h2>
             <p className="text-gray-700 mb-4">
               TutorFinder acts as a platform connecting students and tutors. We are not responsible for the quality of
               tutoring services, disputes between parties, or any damages arising from the use of our platform.
@@ -81,7 +81,7 @@ const TermStudents = () => {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">8. Termination</h2>
+            <h2 className="text-2xl font-bold text-deep mb-4 font-primary">8. Termination</h2>
             <p className="text-gray-700 mb-4">
               Either party may terminate the use of services at any time. TutorFinder reserves the right to suspend or
               terminate accounts that violate these terms.
@@ -89,7 +89,7 @@ const TermStudents = () => {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">9. Contact Information</h2>
+            <h2 className="text-2xl font-bold text-deep mb-4 font-primary">9. Contact Information</h2>
             <p className="text-gray-700 mb-4">For questions about these terms, please contact us at:</p>
             <ul className="list-none text-gray-700">
               <li>Email: legal@tutorfinder.pk</li>

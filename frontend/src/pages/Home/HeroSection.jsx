@@ -47,12 +47,12 @@ const HeroSection = () => {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8 z-10 mb-8">
             <Link to="/register">
-              <button className="bg-secondary hover:bg-secondary-500 text-deep font-semibold py-3 px-6 rounded-full transition duration-300 w-full sm:w-auto cursor-pointer">
+              <button className="bg-secondary hover:bg-secondary-500 text-deep font-bold py-3 px-6 rounded-full transition duration-300 w-full sm:w-auto cursor-pointer">
                 Register Now
               </button>
             </Link>
             <Link to="/tutors">
-              <button className="bg-white hover:bg-gray-100 text-deep font-semibold py-3 px-6 rounded-full transition duration-300 w-full sm:w-auto cursor-pointer">
+              <button className="bg-white hover:bg-gray-100 text-deep font-bold py-3 px-6 rounded-full transition duration-300 w-full sm:w-auto cursor-pointer">
                 Book Session
               </button>
             </Link>

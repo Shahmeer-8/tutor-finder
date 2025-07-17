@@ -2,26 +2,47 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import { Button } from "@/components/ui/button";
-import { Shield, Star, MapPin, Clock, MessageCircle } from "lucide-react";
+import { Shield, Star, MapPin, Clock, Search } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 export default function Tutors() {
   const { tutors, navigate, subjectData } = useContext(AppContext);
-  const { subject: subjectParam } = useParams(); // for capturing subject from URL
-  const [showFilters, setShowFilters] = useState(false);
-  const [filterTutors, setfilterTutors] = useState([]);
+  const { subject: subjectParam } = useParams();
 
-  const handleSubjectClick = (subjectName) => {
-    navigate(`/tutors/${subjectName}`);
-    setShowFilters(false); // Hide filters after selection
+  const [showFilters, setShowFilters] = useState(false);
+  const [filterTutors, setFilterTutors] = useState([]);
+
+  // Search handler
+  const handleSearch = (query) => {
+    const lowerQuery = query.toLowerCase();
+
+    const filtered = tutors.filter((tutor) => {
+      return (
+        tutor.name.toLowerCase().includes(lowerQuery) ||
+        tutor.subject.toLowerCase().includes(lowerQuery) ||
+        (tutor.type && tutor.type.toLowerCase().includes(lowerQuery)) ||
+        (tutor.fee && tutor.fee.toString().includes(lowerQuery))
+      );
+    });
+
+    setFilterTutors(filtered);
   };
 
-  // filter the tutor  based on subject
+  // Filter by subject tab
+  const handleSubjectClick = (subjectName) => {
+    navigate(`/tutors/${subjectName}`);
+    setShowFilters(false);
+  };
+
+  // Apply subject filter on URL change
   useEffect(() => {
-    if (subjectParam) {
-      setfilterTutors(tutors.filter((tutor) => tutor.subject === subjectParam));
+    if (subjectParam && subjectParam !== "all") {
+      const filtered = tutors.filter(
+        (tutor) => tutor.subject.toLowerCase() === subjectParam.toLowerCase()
+      );
+      setFilterTutors(filtered);
     } else {
-      setfilterTutors(tutors); // Show all tutors if no subject selected
+      setFilterTutors(tutors);
     }
   }, [subjectParam, tutors]);
 
@@ -30,7 +51,6 @@ export default function Tutors() {
       <div className="py-15 mx-auto max-w-[1440px] px-6 lg:px-12">
         {/* Hero Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          {/* Left: Text */}
           <div className="max-w-xl mx-auto md:mx-0 text-center md:text-left">
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-deep font-primary">
               Unlock Your Potential with Skilled Tutors
@@ -42,14 +62,12 @@ export default function Tutors() {
             </p>
           </div>
 
-          {/* Right: Solar Animation */}
+          {/* Orbit Animation */}
           <div className="relative w-60 h-75 md:w-96 md:h-96 mx-auto">
-            {/* Center Logo */}
             <div className="absolute top-1/2 left-1/2 w-24 h-24 md:w-40 md:h-40 transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center z-20">
               <Link
                 to="/"
-                className="text-[24px] font-bold leading-[120%] flex items-center gap-x-1 text-deep"
-                aria-label="TutorFinder Home"
+                className="text-[24px] font-bold flex items-center gap-x-1 text-deep"
               >
                 <span className="inline-flex items-center justify-center p-2 h-8 w-8 bg-secondary text-tertiary rotate-[-31deg] rounded-full">
                   T
@@ -58,7 +76,6 @@ export default function Tutors() {
               </Link>
             </div>
 
-            {/* Orbit Animation */}
             <div className="absolute top-1/2 left-1/2 w-65 h-65 md:w-80 md:h-80 rounded-full border border-indigo-800 animate-spin transform -translate-x-1/2 -translate-y-1/2">
               {tutors.slice(0, 7).map((tutor, i) => {
                 const angle = (360 / 7) * i;
@@ -70,16 +87,14 @@ export default function Tutors() {
                 return (
                   <img
                     key={tutor._id}
-                    src={tutor.image}
+                    src={tutor.image || "/placeholder.svg"}
                     alt={tutor.name}
                     title={tutor.name}
                     className="absolute w-14 h-14 md:w-16 md:h-16 rounded-full border-4 border-white shadow-md object-cover cursor-pointer hover:scale-110 transition-transform"
                     style={{
                       top: `calc(50% + ${y}px)`,
                       left: `calc(50% + ${x}px)`,
-                      transform: `translate(-50%, -50%) rotate(-${
-                        (360 / 7) * i
-                      }deg)`,
+                      transform: `translate(-50%, -50%) rotate(-${angle}deg)`,
                     }}
                   />
                 );
@@ -88,13 +103,12 @@ export default function Tutors() {
           </div>
         </div>
 
-        {/* Filters Button (visible only on small screens) */}
+        {/* Filters Toggle for Mobile */}
         <div className="mt-10 sm:hidden flex justify-center font-secondary">
           <Button
             variant="secondary"
             size="lg"
-            className="px-6 py-2"
-            onClick={() => setShowFilters((prev) => !prev)}
+            onClick={() => setShowFilters(!showFilters)}
           >
             Filters
           </Button>
@@ -106,15 +120,25 @@ export default function Tutors() {
             showFilters ? "flex" : "hidden sm:flex"
           } flex-col sm:flex-row flex-wrap justify-center gap-4 mt-6`}
         >
+          <Button
+            onClick={() => handleSubjectClick("all")}
+            variant="secondary"
+            className={`cursor-pointer w-full sm:w-auto px-8  text-deep font-secondary ${
+              subjectParam === "all" || !subjectParam
+                ? "bg-deep text-white"
+                : ""
+            }`}
+          >
+            All
+          </Button>
+
           {subjectData.map((subject, i) => (
             <Button
               onClick={() => handleSubjectClick(subject.name)}
               key={i}
               variant="secondary"
-              className={`w-full sm:w-auto px-8 cursor-pointer transition-all duration-300 font-secondary text-deep ${
-                subject.name === subjectParam
-                  ? "bg-deep text-white hover:bg-deep/80 font-secondary"
-                  : ""
+              className={`cursor-pointer w-full sm:w-auto px-8 font-secondary text-deep ${
+                subject.name === subjectParam ? "bg-deep text-white" : ""
               }`}
             >
               {subject.name}
@@ -123,21 +147,35 @@ export default function Tutors() {
         </div>
       </div>
 
-      {/* Card for tutor */}
+      {/* Search Box */}
+      <div className="mt-6 flex justify-center font-secondary">
+        <div className="relative w-full max-w-xl">
+          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+            <Search className="w-5 h-5" />
+          </span>
+          <input
+            type="text"
+            placeholder="Search by name, subject, type, or fee..."
+            onChange={(e) => handleSearch(e.target.value)}
+            className="w-full px-4 py-4 pl-10 text-sm font-medium rounded-full bg-white text-deep placeholder-gray-500 border border-gray-500 focus:ring-2 focus:ring-deep focus:outline-none transition duration-200 font-primary shadow-sm"
+          />
+        </div>
+      </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-6 lg:px-10 max-w-6xl mx-auto">
+      {/* Tutors Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-6 lg:px-10 max-w-6xl mx-auto mt-10">
         {filterTutors.map((tutor, i) => (
           <div
             key={tutor._id || i}
             className="relative mb-9 md:mb-15 rounded-2xl bg-white shadow-custom border border-deep p-6 flex flex-col items-center text-center transition-all hover:shadow-2xl"
           >
-            {/* Curved Gradient Header */}
+            {/* Header Gradient */}
             <div className="relative w-full h-32 bg-gradient-to-br from-slate-400 via-[#162d71] to-slate-500 rounded-t-2xl overflow-hidden mb-10">
               <div className="absolute inset-0 bg-gradient-to-br from-slate-400/80 via-[#162d71]/80 to-slate-500/80"></div>
               <div className="absolute -bottom-1 left-0 right-0 h-8 bg-white rounded-t-[2rem]"></div>
             </div>
 
-            {/* Profile Image */}
+            {/* Avatar */}
             <div className="absolute top-16 left-1/2 transform -translate-x-1/2">
               <div className="relative">
                 <img
@@ -145,7 +183,6 @@ export default function Tutors() {
                   alt={tutor.name}
                   className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-lg"
                 />
-                {/* Verified Badge */}
                 {tutor.verified && (
                   <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-1 border-2 border-white">
                     <Shield className="h-3 w-3 text-white" />
@@ -154,18 +191,16 @@ export default function Tutors() {
               </div>
             </div>
 
-            {/* Name & Subject */}
-            <h3 className="text-xl md:text-2xl font-bold text-deep font-primary">
+            {/* Tutor Info */}
+            <h3 className="text-xl md:text-2xl font-bold text-deep font-primary mt-2">
               {tutor.name}
             </h3>
             <p className="text-md text-tertiary mt-1">{tutor.subject}</p>
-
-            {/* Bio/Tagline */}
-            <p className="text-sm text-gray-400 mt-2 mb-4 italic text-center px-2">
+            <p className="text-sm text-gray-400 mt-2 mb-4 italic px-2">
               Passionate about teaching and helping.
             </p>
 
-            {/* Location & Experience */}
+            {/* Meta Info */}
             <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-500 mb-3">
               <div className="flex items-center gap-1">
                 <MapPin className="h-4 w-4" />
@@ -180,26 +215,24 @@ export default function Tutors() {
                 <span>{tutor.experience || "2+ Years"}</span>
               </div>
               {tutor.rating && (
-                <div className="flex items-center gap-1 mt-1 text-yellow-400">
+                <div className="flex items-center gap-1 text-yellow-400">
                   <Star className="h-4 w-4 fill-current" />
-                  <span className="text-sm text-yellow-500 font-medium">
-                    {tutor.rating}
-                  </span>
+                  <span className="font-medium text-sm">{tutor.rating}</span>
                 </div>
               )}
             </div>
 
-            {/* Subject Type */}
+            {/* Type */}
             <div className="mb-4">
               <Badge variant="outline" className="text-xs">
                 {tutor.type || "Online / In-Person"}
               </Badge>
             </div>
 
-            {/* View Profile Button */}
+            {/* CTA Button */}
             <Button
               asChild
-              className="w-full mt-auto bg-deep hover:bg-white border-2 border-deep hover:text-deep"
+              className="w-full bg-gradient-to-r from-slate-900 to-deep hover:from-deep hover:to-slate text-white border-0 rounded-xl"
             >
               <Link to={`/session/${tutor._id}`}>View Profile</Link>
             </Button>
