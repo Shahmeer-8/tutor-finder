@@ -220,4 +220,56 @@ export const tutors = [
 ];
 
 // data for blogs
-
+export const blogs = [
+  {
+    title: "5 Study Habits That Actually Work",
+    image:
+      "https://images.squarespace-cdn.com/content/v1/5fbdd5b15687f52b6b6e067d/1613196772763-NMMB90UEJKR6IX3OFRCU/study.jpg",
+    writer: "Ayesha Khan",
+    category: "Productivity",
+    date: "2025-06-15",
+    role: "student",
+  },
+  {
+    title: "How to Build Trust with Your Students",
+    image: "https://www.workstyle.io/img/blog/team-trust-building-activities/image3.jpg",
+    writer: "Mr. Imran Shah",
+    category: "Teaching Tips",
+    date: "2025-04-09",
+    role: "tutor",
+  },
+  
+  {
+    title: "How I Organize My Tutoring Schedule",
+    image: "https://blog.zohowebstatic.com/sites/zblogs/images/shifts/shiftscheduleblog/image_in_slide_2_of_different_types_of_schedules_-_know_whats_right_for_you.jpeg",
+    writer: "Ali Raza",
+    category: "Time Management",
+    date: "2025-05-28",
+    role: "tutor",
+  },
+  {
+    title: "Exam Stress? Try These Science-Backed Tips",
+    image: "https://www.thespark.org.uk/wp-content/uploads/2022/03/exam-stress-man-scaled.jpeg",
+    writer: "Fatima Noor",
+    category: "Mental Health",
+    date: "2025-06-01",
+    role: "student",
+  },
+  {
+    title: "The Tutor’s Guide to Personalized Learning",
+    image: "https://www.21kschool.com/pk/wp-content/uploads/sites/17/2022/09/5-Benefits-of-Personalized-Learning.png",
+    writer: "Dr. Kamran Zia",
+    category: "Pedagogy",
+    date: "2025-05-20",
+    role: "tutor",
+  },
+  {
+    title: "Top 10 Free Resources for Online Learning",
+    image:
+      "https://er.educause.edu/-/media/images/blogs/2020/8/er20_3206_706x394_blog.jpg?hash=6BCDA470A42BF8086319452828355A6BE4BC96CD",
+    writer: "Sara Ahmed",
+    category: "eLearning",
+    date: "2025-06-05",
+    role: "student",
+  },
+];
