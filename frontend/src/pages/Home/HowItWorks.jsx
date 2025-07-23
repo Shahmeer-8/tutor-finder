@@ -31,7 +31,7 @@ const HowItWorks = () => {
             <h2 className="text-3xl md:text-5xl font-bold text-deep mb-4 font-primary">
               How It Works
             </h2>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto font-secondary">
               Getting started with TutorFinder is simple. Follow these easy
               steps to find your perfect tutor.
             </p>
