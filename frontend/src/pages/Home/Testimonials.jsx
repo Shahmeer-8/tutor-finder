@@ -1,65 +1,72 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { useEffect, useState } from "react"
+import { motion } from "framer-motion"
+import { Quote } from "lucide-react"
 
 const testimonials = [
   {
-    name: "Sarah Malik",
-    role: "Student",
-    message: "This platform helped me improve my math skills fast!",
-    image: "https://i.pravatar.cc/150?img=10",
-    rating: 5,
+    id: 1,
+    text: "Exceeded our expectations with innovative designs that brought our vision to life - a truly remarkable creative agency.",
+    author: "Samantha Johnson",
+    position: "CEO and Co-founder of ABC Company",
+    avatar: "/placeholder.svg?height=40&width=40",
   },
   {
-    name: "Ahmed Khan",
-    role: "Tutor",
-    message: "Managing sessions is so smooth here. Love it!",
-    image: "https://i.pravatar.cc/150?img=8",
-    rating: 5,
+    id: 2,
+    text: "Their ability to capture our brand essence in every project is unparalleled - an invaluable creative collaborator.",
+    author: "Isabella Rodriguez",
+    position: "CEO and Co-founder of ABC Company",
+    avatar: "/placeholder.svg?height=40&width=40",
   },
   {
-    name: "Areeba Shah",
-    role: "Student",
-    message: "Tutors are really helpful and professional.",
-    image: "https://i.pravatar.cc/150?img=5",
-    rating: 4,
+    id: 3,
+    text: "Creative geniuses who listen, understand, and craft captivating visuals - an agency that truly understands our needs.",
+    author: "Gabrielle Williams",
+    position: "CEO and Co-founder of ABC Company",
+    avatar: "/placeholder.svg?height=40&width=40",
   },
   {
-    name: "Zain Raza",
-    role: "Tutor",
-    message: "I got students from different cities—amazing platform!",
-    image: "https://i.pravatar.cc/150?img=2",
-    rating: 5,
+    id: 4,
+    text: "A refreshing and imaginative agency that consistently delivers exceptional results - highly recommended for any project.",
+    author: "Victoria Thompson",
+    position: "CFO and Co-founder of ABC Company",
+    avatar: "/placeholder.svg?height=40&width=40",
   },
   {
-    name: "Fatima Noor",
-    role: "Student",
-    message: "The booking process is simple and convenient.",
-    image: "https://i.pravatar.cc/150?img=3",
-    rating: 4,
+    id: 5,
+    text: "Their team's artistic flair and strategic approach resulted in remarkable campaigns - a reliable creative partner.",
+    author: "John Peter",
+    position: "CEO and Co-founder of ABC Company",
+    avatar: "/placeholder.svg?height=40&width=40",
   },
   {
-    name: "Hassan Ali",
-    role: "Tutor",
-    message: "Very easy to manage teaching schedule and students.",
-    image: "https://i.pravatar.cc/150?img=4",
-    rating: 5,
+    id: 6,
+    text: "From concept to execution, their creativity knows no bounds - a game-changer for our brand's success.",
+    author: "Natalie Martinez",
+    position: "CEO and Co-founder of ABC Company",
+    avatar: "/placeholder.svg?height=40&width=40",
   },
   {
-    name: "Laiba Saeed",
-    role: "Student",
-    message: "Learned coding in just 2 months. Thank you!",
-    image: "https://i.pravatar.cc/150?img=11",
-    rating: 5,
+    id: 7,
+    text: "Outstanding attention to detail and innovative solutions that transformed our digital presence completely.",
+    author: "Michael Chen",
+    position: "CTO and Co-founder of TechFlow Inc",
+    avatar: "/placeholder.svg?height=40&width=40",
   },
   {
-    name: "Bilal Rizvi",
-    role: "Tutor",
-    message: "Interactive interface and great support system.",
-    image: "https://i.pravatar.cc/150?img=6",
-    rating: 5,
+    id: 8,
+    text: "Their collaborative approach and creative vision helped us achieve results beyond our wildest dreams.",
+    author: "Sarah Mitchell",
+    position: "Marketing Director at InnovateCorp",
+    avatar: "/placeholder.svg?height=40&width=40",
   },
-];
+  {
+    id: 9,
+    text: "Exceptional creativity paired with strategic thinking - they've become an integral part of our success story.",
+    author: "David Kumar",
+    position: "Founder of StartupVenture",
+    avatar: "/placeholder.svg?height=40&width=40",
+  },
+]
 
 const TestimonialCard = ({ testimonial }) => (
   <motion.div
