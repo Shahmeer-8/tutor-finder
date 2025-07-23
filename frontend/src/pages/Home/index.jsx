@@ -5,6 +5,7 @@ import Feature from './Feature'
 import FeaturedTutors from './FeaturedTutors'
 import HowItWorks from './HowItWorks'
 import { Stats } from './stats'
+import Testimonials from './Testimonials'
 
 const Home = () => {
   return (
@@ -12,9 +13,10 @@ const Home = () => {
    <HeroSection/>
    {/* <Feature/> */}
    <Subjects/>
-   <Stats/>
    <FeaturedTutors/>
+   <Stats/>
    <HowItWorks/>
+   <Testimonials/>
    </>
   )
 }
