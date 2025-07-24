@@ -89,7 +89,7 @@ export default function Tutors() {
         </div>
 
         {/* Filters Button (visible only on small screens) */}
-        <div className="mt-10 sm:hidden flex justify-center font-secondary" >
+        <div className="mt-10 sm:hidden flex justify-center font-secondary">
           <Button
             variant="secondary"
             size="lg"
@@ -124,28 +124,36 @@ export default function Tutors() {
       </div>
 
       {/* Card for tutor */}
-      
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 px-6 lg:px-12">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-6 lg:px-10 max-w-6xl mx-auto">
         {filterTutors.map((tutor, i) => (
           <div
             key={tutor._id || i}
-            className="relative mb-9 md:mb-15 rounded-2xl backdrop-blur-lg bg-white/10 border border-deep shadow-xl p-6 flex flex-col items-center text-center transition-all hover:shadow-2xl"
+            className="relative mb-9 md:mb-15 rounded-2xl bg-white shadow-custom border border-deep p-6 flex flex-col items-center text-center transition-all hover:shadow-2xl"
           >
-            {/* Profile Image */}
-            <div className="relative">
-              <img
-                src={tutor.image || "/placeholder.svg"}
-                alt={tutor.name}
-                className="w-24 h-24 rounded-full object-cover border-4 border-secondary mb-4 "
-              />
-              {/* Optional Verified Badge */}
-              {tutor.verified && (
-                <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-1">
-                  <Shield className="h-3 w-3 text-white" />
-                </div>
-              )}
+            {/* Curved Gradient Header */}
+            <div className="relative w-full h-32 bg-gradient-to-br from-slate-400 via-[#162d71] to-slate-500 rounded-t-2xl overflow-hidden mb-10">
+              <div className="absolute inset-0 bg-gradient-to-br from-slate-400/80 via-[#162d71]/80 to-slate-500/80"></div>
+              <div className="absolute -bottom-1 left-0 right-0 h-8 bg-white rounded-t-[2rem]"></div>
             </div>
+
+            {/* Profile Image */}
+            <div className="absolute top-16 left-1/2 transform -translate-x-1/2">
+              <div className="relative">
+                <img
+                  src={tutor.image || "/placeholder.svg"}
+                  alt={tutor.name}
+                  className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-lg"
+                />
+                {/* Verified Badge */}
+                {tutor.verified && (
+                  <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-1 border-2 border-white">
+                    <Shield className="h-3 w-3 text-white" />
+                  </div>
+                )}
+              </div>
+            </div>
+
             {/* Name & Subject */}
             <h3 className="text-xl md:text-2xl font-bold text-deep font-primary">
               {tutor.name}
@@ -171,7 +179,6 @@ export default function Tutors() {
                 <Clock className="h-4 w-4" />
                 <span>{tutor.experience || "2+ Years"}</span>
               </div>
-              {/* Rating */}
               {tutor.rating && (
                 <div className="flex items-center gap-1 mt-1 text-yellow-400">
                   <Star className="h-4 w-4 fill-current" />
