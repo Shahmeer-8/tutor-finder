@@ -43,7 +43,7 @@ const FaqSection = () => {
   };
 
   return (
-    <section className="bg-white py-20 px-4 sm:px-6 lg:px-12 ">
+    <section className="bg-secondary/80 py-20 px-4 sm:px-6 lg:px-12 ">
       <div className="max-w-5xl mx-auto " >
         <h2 className="text-3xl sm:text-4xl font-bold text-deep  mb-10 text-center font-primary">
           Frequently Asked Questions
@@ -75,7 +75,7 @@ const FaqSection = () => {
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="overflow-hidden text-deep mt-3 text-base font-secondary "
+                    className="overflow-hidden text-deep mt-3 text-base font-secondary"
                   >
                     {faq.answer}
                   </motion.div>

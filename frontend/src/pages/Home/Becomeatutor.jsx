@@ -64,7 +64,7 @@ const BecomeATutor = () => {
           transition={{ duration: 0.4, delay: 0.3 }}
         >
           <Link to="/register">
-            <button className="bg-secondary hover:bg-secondary-600 text-deep font-bold py-3 px-8 rounded-full transition duration-300 text-lg font-secondary shadow-md">
+            <button className="cursor-pointer bg-secondary hover:bg-secondary-600 text-deep font-bold py-3 px-8 rounded-full transition duration-300 text-lg font-secondary shadow-md">
               Join as Tutor
             </button>
           </Link>
