@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../components/ui/select";
+import BecomeATutor from "./Home/Becomeatutor";
 
 const Blog = () => {
   const { blogs } = useContext(AppContext);
@@ -123,6 +124,9 @@ const Blog = () => {
           )}
         </div>
       </div>
+     <div className="bg-gradient-to-r from-slate-900 via-deep to-slate-900 py-12">
+  <BecomeATutor  bgClass="bg-gradient-to-r from-slate-900 via-deep to-slate-900"/>
+</div>
     </div>
   );
 };
