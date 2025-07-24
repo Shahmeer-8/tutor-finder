@@ -57,7 +57,7 @@ const FaqSection = () => {
             >
               <button
                 onClick={() => toggleFAQ(index)}
-                className="w-full flex items-center justify-between text-left font-medium text-deep cursor-pointer text-xl font-secondary"
+                className="w-full flex items-center justify-between text-left text-deep cursor-pointer text-xl font-secondary font-semibold"
               >
                 <span>{faq.question}</span>
                 <ChevronDown
@@ -75,7 +75,7 @@ const FaqSection = () => {
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="overflow-hidden text-gray-600 mt-3 text-base font-secondary"
+                    className="overflow-hidden text-deep mt-3 text-base font-secondary "
                   >
                     {faq.answer}
                   </motion.div>
