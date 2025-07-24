@@ -3,10 +3,9 @@ import { useContext } from "react";
 import { AppContext } from "../../context/AppContext";
 import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import tutorFemale from "../../assets/tutors/tutor-female.png";
 
 const FeaturedTutors = () => {
-  const { tutors, navigate, currency } = useContext(AppContext);
+  const { tutors, navigate} = useContext(AppContext);
 
   return (
 
