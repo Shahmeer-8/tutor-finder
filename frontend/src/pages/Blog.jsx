@@ -2,6 +2,13 @@ import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { CalendarDays, UserCircle } from "lucide-react";
 import { AppContext } from "../context/AppContext";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
 
 const Blog = () => {
   const { blogs } = useContext(AppContext);
@@ -29,24 +36,19 @@ const Blog = () => {
         </h1>
 
         {/* Search + Filter */}
-        <div className="flex flex-col md:flex-row justify-center items-center gap-10 mb-10">
+        <div className="flex flex-col md:flex-row justify-center items-center gap-8 mb-10">
           {/* Role Filter */}
-          <div className="w-full md:w-50 relative">
-            <select
-              value={roleFilter}
-              onChange={(e) => setRoleFilter(e.target.value)}
-              className="w-full px-4 py-4 pr-14 font-secondary text-sm font-medium rounded-full bg-deep text-white border border-none focus:ring-2 focus:ring-deep focus:outline-none shadow-lg transition duration-200 cursor-pointer"
-            >
-              <option value="All">
-                All Blogs
-              </option>
-              <option value="Student" >
-                Student
-              </option>
-              <option value="Tutor" >
-                Tutor
-              </option>
-            </select>
+          <div className="w-full md:w-60 relative">
+            <Select value={roleFilter} onValueChange={setRoleFilter}>
+              <SelectTrigger className="w-[200px] font-primary border px-5 py-6 bg-deep text-white rounded-full border-gray-400 focus:ring-2 focus:ring-deep focus:outline-none">
+                <SelectValue placeholder="Select Role" />
+              </SelectTrigger>
+              <SelectContent className={"bg-deep text-white rounded-lg shadow-lg"}>
+                <SelectItem value="All">All Blogs</SelectItem>
+                <SelectItem value="Tutor">Tutor</SelectItem>
+                <SelectItem value="Student">Student</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Search Field */}
