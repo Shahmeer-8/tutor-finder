@@ -15,7 +15,8 @@ const Blog = () => {
       blog.category.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesRole =
-      roleFilter === "All" || blog.role.toLowerCase() === roleFilter.toLowerCase();
+      roleFilter === "All" ||
+      blog.role.toLowerCase() === roleFilter.toLowerCase();
 
     return matchesSearch && matchesRole;
   });
@@ -28,43 +29,52 @@ const Blog = () => {
         </h1>
 
         {/* Search + Filter */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-10">
-  {/* Search Field */}
-  <div className="relative w-full md:w-1/2">
-    <input
-      type="text"
-      placeholder="Search blogs by title or category..."
-      className="w-full px-4 py-3 pl-10 text-sm font-medium rounded-xl bg-white text-deep placeholder-gray-400 border border-gray-200 focus:ring-2 focus:ring-deep focus:outline-none shadow-sm transition duration-200 font-primary"
-      value={searchTerm}
-      onChange={(e) => setSearchTerm(e.target.value)}
-    />
-    <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-      <svg
-        className="w-5 h-5"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        viewBox="0 0 24 24"
-      >
-        <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M16 10a6 6 0 11-12 0 6 6 0 0112 0z" />
-      </svg>
-    </div>
-  </div>
+        <div className="flex flex-col md:flex-row justify-center items-center gap-10 mb-10">
+          {/* Role Filter */}
+          <div className="w-full md:w-50 relative">
+            <select
+              value={roleFilter}
+              onChange={(e) => setRoleFilter(e.target.value)}
+              className="w-full px-4 py-4 pr-14 font-secondary text-sm font-medium rounded-full bg-deep text-white border border-none focus:ring-2 focus:ring-deep focus:outline-none shadow-lg transition duration-200 cursor-pointer"
+            >
+              <option value="All">
+                All Blogs
+              </option>
+              <option value="Student" >
+                Student
+              </option>
+              <option value="Tutor" >
+                Tutor
+              </option>
+            </select>
+          </div>
 
-  {/* Role Filter */}
-  <div className="w-full md:w-auto">
-    <select
-      value={roleFilter}
-      onChange={(e) => setRoleFilter(e.target.value)}
-      className="w-full md:w-auto px-4 py-3 text-sm font-medium rounded-xl bg-white text-deep border border-gray-200 focus:ring-2 focus:ring-deep focus:outline-none shadow-sm transition duration-200 font-primary"
-    >
-      <option value="All">🎓 All Roles</option>
-      <option value="Student">Student</option>
-      <option value="Tutor">Tutor</option>
-    </select>
-  </div>
-</div>
-
+          {/* Search Field */}
+          <div className="relative w-full md:w-1/2">
+            <input
+              type="text"
+              placeholder="Search blogs by title or category..."
+              className="w-full px-4 py-4 pl-10 text-sm font-medium rounded-full bg-white text-deep placeholder-gray-500 border border-gray-500 focus:ring-2 focus:ring-deep focus:outline-none transition duration-200 font-primary shadow-sm"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 21l-4.35-4.35M16 10a6 6 0 11-12 0 6 6 0 0112 0z"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
 
         {/* Blog Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">

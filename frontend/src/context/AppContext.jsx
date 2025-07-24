@@ -1,6 +1,6 @@
 import React, { createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { tutors, subjectData, blogs, stats } from "../data/data";
+import { tutors, subjectData, blogs } from "../data/data";
 
 // Create Context for the application
 export const AppContext = createContext();
@@ -18,7 +18,7 @@ const AppContextProvider = ({ children }) => {
     currency,
     subjectData,
     blogs,
-    stats
+    
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
