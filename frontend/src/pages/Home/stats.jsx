@@ -95,7 +95,8 @@ export function Stats() {
   }, []);
 
   return (
-    <div className="flex items-center justify-center bg-deep p-10 md:p-20">
+    <div className="flex  flex-col items-center justify-center bg-deep p-10 md:p-20">
+      <h1 className="font-primary text-white text-4xl md:text-5xl font-bold mb-10" >Your Success is Our Story</h1>
       <div
         ref={statsRef}
         className="w-full max-w-6xl rounded-2xl p-6 sm:p-8 md:p-10 bg-[#1a2557] shadow-custom"
