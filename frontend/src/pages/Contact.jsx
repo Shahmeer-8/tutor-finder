@@ -2,6 +2,8 @@
 import { useState } from "react"
 import { Mail, MapPin, Phone, Headphones, Globe, Facebook, Twitter, Instagram, Linkedin, PhoneCall } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -21,8 +23,15 @@ const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     console.log("Form submitted:", formData)
-    alert("Message sent successfully!")
+    toast.success("Message sent successfully!", {
+    position: "bottom-right",
+    autoClose: 3000,
+    hideProgressBar: false,
+    pauseOnHover: true,
+    draggable: true,
+  });
     setFormData({ name: "", email: "", message: "" })
+    
   }
 
   return (
@@ -33,14 +42,14 @@ const Contact = () => {
         {/* Header Section */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 font-primary">Feel free to get in touch</h1>
-          <p className="text-blue-200 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-blue-200 max-w-2xl mx-auto leading-relaxed font-secondary">
             We're here to help! Have a question, feedback, or just want to say hello? We'll get back to you as soon as
             possible.
           </p>
         </div>
 
         {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start mb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start 0">
           {/* Left Side: Contact Form */}
           <div className="bg-white p-8 rounded-xl shadow-2xl border border-gray-100">
             <h2 className="text-3xl font-bold mb-4 text-deep font-secondary">Get in Touch</h2>
@@ -49,10 +58,10 @@ const Contact = () => {
               as possible.
             </p>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <form onSubmit={handleSubmit} className="space-y-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="name" className="block font-medium text-deep mb-2">
+                  <label htmlFor="name" className="block font-medium text-deep ">
                     Name
                   </label>
                   <input
@@ -67,7 +76,7 @@ const Contact = () => {
                   />
                 </div>
                 <div>
-                  <label htmlFor="email" className="block font-medium text-deep mb-2">
+                  <label htmlFor="email" className="block font-medium text-deep ">
                     Email
                   </label>
                   <input
@@ -84,7 +93,7 @@ const Contact = () => {
               </div>
 
               <div>
-                <label htmlFor="message" className="block font-medium text-deep mb-2">
+                <label htmlFor="message" className="block font-medium text-deep ">
                   Message
                 </label>
                 <textarea
@@ -99,20 +108,14 @@ const Contact = () => {
                 ></textarea>
               </div>
 
-              <div className="flex items-center space-x-2">
-                <input type="checkbox" id="privacy" className="rounded" required />
-                <label htmlFor="privacy" className="text-sm text-gray-600">
-                  I agree to the privacy policy
-                </label>
-              </div>
-
               <Button
                 type="submit"
-                className="w-full bg-deep hover:bg-deep/90 cursor-pointer text-white py-3 rounded-lg font-medium transition-colors"
+                className="w-full bg-deep hover:bg-deep/90 cursor-pointer text-white py-5 rounded-lg font-medium transition-colors"
               >
                 Send Message
               </Button>
             </form>
+            <ToastContainer />
           </div>
 
           {/* Right Side: Contact Info */}
