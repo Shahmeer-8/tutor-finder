@@ -43,25 +43,25 @@ const FaqSection = () => {
   };
 
   return (
-    <section className="bg-white py-20 px-4 sm:px-6 lg:px-12">
-      <div className="max-w-5xl mx-auto">
-        <h2 className="text-3xl sm:text-4xl font-bold text-deep mb-10 text-center font-primary">
+    <section className="bg-white py-20 px-4 sm:px-6 lg:px-12 ">
+      <div className="max-w-5xl mx-auto " >
+        <h2 className="text-3xl sm:text-4xl font-bold text-deep  mb-10 text-center font-primary">
           Frequently Asked Questions
         </h2>
 
-        <div className="space-y-4">
+        <div className="space-y-4 ">
           {faqs.map((faq, index) => (
             <div
               key={index}
-              className="border border-gray-200 rounded-xl p-4 shadow-sm bg-white"
+              className="border border-b-2  rounded-xl p-8 shadow-sm bg-white"
             >
               <button
                 onClick={() => toggleFAQ(index)}
-                className="w-full flex items-center justify-between text-left font-medium text-deep text-lg font-secondary"
+                className="w-full flex items-center justify-between text-left font-medium text-deep cursor-pointer text-xl font-secondary"
               >
                 <span>{faq.question}</span>
                 <ChevronDown
-                  className={`h-5 w-5 transform transition-transform duration-300 ${
+                  className={`h-8 w-8 bg-deep text-white  rounded-3xl transform transition-transform duration-300 ${
                     openIndex === index ? "rotate-180" : ""
                   }`}
                 />
