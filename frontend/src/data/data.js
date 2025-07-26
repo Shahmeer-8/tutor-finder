@@ -93,9 +93,9 @@ export const tutors = [
   },
   {
     _id: "tutor5",
-    name: "Mariam Nawaz",
+    name: "Mariam Umair",
     image: "https://randomuser.me/api/portraits/women/60.jpg",
-    email: "mariam.nawaz@example.com",
+    email: "mariam.umair@example.com",
     phone: "0307-5566778",
     totalSessions: 15,
     joinedDate: "2022-11-01",
