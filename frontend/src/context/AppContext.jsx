@@ -7,7 +7,7 @@ export const AppContext = createContext();
 
 const AppContextProvider = ({ children }) => {
   const navigate = useNavigate();
-  const [token, setToken] = useState("dummyToken");
+  const [token, setToken] = useState(" ");
   const currency = "$";
 
   const value = {

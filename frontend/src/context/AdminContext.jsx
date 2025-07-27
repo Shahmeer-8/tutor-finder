@@ -4,7 +4,7 @@ import { createContext, useState } from "react";
 export const AdminContext = createContext();
 
 const AdminContextProvider = (props) => {
-  const [atoken, setAtoken] = useState("dummyToken");
+  const [atoken, setAtoken] = useState(" ");
   
 // get all tutors from Backend
   // const getAllTutors = async ()=>{
