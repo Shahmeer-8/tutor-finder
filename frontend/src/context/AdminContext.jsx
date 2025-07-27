@@ -7,13 +7,7 @@ const AdminContextProvider = (props) => {
   const [atoken, setAtoken] = useState(" ");
   
 // get all tutors from Backend
-  // const getAllTutors = async ()=>{
-  //   try {
-      
-  //   } catch (error) {
-      
-  //   }
-  // }
+
   
   const value = {
     atoken,
