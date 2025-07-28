@@ -316,7 +316,7 @@ export const blogs = [
   {
     title: "How I Organize My Tutoring Schedule",
     image: "https://blog.zohowebstatic.com/sites/zblogs/images/shifts/shiftscheduleblog/image_in_slide_2_of_different_types_of_schedules_-_know_whats_right_for_you.jpeg",
-    writer: "Ali Raza",
+    writer: "Ali",
     category: "Time Management",
     date: "2025-05-28",
     role: "tutor",
