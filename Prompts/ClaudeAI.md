@@ -2,12 +2,11 @@
 
 You are a senior full-stack architect. Design and generate production-ready code for the following platform.
 
-Project: TutorFinder
+**Project: TutorFinder**
 
 A full-stack tutoring marketplace connecting students and verified tutors across Pakistan.
 
 Tech Stack:
-
 - Frontend: Next.js
 - Backend: Node.js + Express.js (MVC pattern)
 - Database: MongoDB Atlas (Mongoose ODM)
@@ -20,7 +19,6 @@ Tech Stack:
 **Core Features**
 
 1. Authentication & Authorization
-
 - Roles: student, tutor, admin
 - JWT access token (short-lived)
 - Refresh token (stored securely in DB)
@@ -32,7 +30,6 @@ Tech Stack:
 - Password reset via secure token
 
 2. Tutor Verification System
-
 - Tutors upload verification documents
 - Verification states:
   - pending
@@ -42,13 +39,10 @@ Tech Stack:
 - Verification badge shown on profile
 
 3. Tuition Request & Booking Flow
-
 Lifecycle:
 Student → Send Request → Multiple Tutors Receive → Tutor Approves/Rejects →
 If Approved → Booking Created → 2-Day Trial Activated → Payment Required After Trial
-
 Requirements:
-
 - Student cannot abuse trial (track trial usage in DB)
 - Multiple tutors per request
 - Tutors can approve multiple students
@@ -61,7 +55,6 @@ Requirements:
   - cancelled
 
 4. Courses
-
 - Tutor-specific
 - Linked to:
   - Education level (O Level, Matric, FSC, etc.)
@@ -71,23 +64,20 @@ Requirements:
 - Admin can view all
 
 5. Filtering & Search
-
 Filter tutors by:
-
 - City
 - Subject
 - Mode
 - Education level
 - Rating
 - Verified badge
-  Include:
+Include:
 - Pagination
 - Sorting
 - Search API
 
 6. Admin Panel
-   Admin capabilities:
-
+Admin capabilities:
 - View tutor list
 - View student list
 - Temporary/permanent blocking
