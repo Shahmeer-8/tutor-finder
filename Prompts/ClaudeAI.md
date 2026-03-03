@@ -69,3 +69,17 @@ Requirements:
   - Mode (online/home)
 - CRUD by tutor
 - Admin can view all
+
+5. Filtering & Search
+
+- Filter tutors by:
+  - City
+  - Subject
+  - Mode
+  - Education level
+  - Rating
+  - Verified badge
+- Include:
+  - Pagination
+  - Sorting
+  - Search API
