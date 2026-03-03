@@ -64,20 +64,19 @@ Requirements:
 - Admin can view all
 
 **5. Filtering & Search**
-Filter tutors by:
-- City
-- Subject
-- Mode
-- Education level
-- Rating
-- Verified badge
-Include:
-- Pagination
-- Sorting
-- Search API
+- Filter tutors by:
+  - City
+  - Subject
+  - Mode
+  - Education level
+  - Rating
+  - Verified badge
+- Include:
+  - Pagination
+  - Sorting
+  - Search API
 
 **6. Admin Panel**
-Admin capabilities:
 - View tutor list
 - View student list
 - Temporary/permanent blocking
