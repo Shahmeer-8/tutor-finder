@@ -7,6 +7,7 @@ You are a senior full-stack architect. Design and generate production-ready code
 A full-stack tutoring marketplace connecting students and verified tutors across Pakistan.
 
 Tech Stack:
+
 - Frontend: Next.js
 - Backend: Node.js + Express.js (MVC pattern)
 - Database: MongoDB Atlas (Mongoose ODM)
@@ -19,6 +20,7 @@ Tech Stack:
 ### Core Features
 
 **1. Authentication & Authorization**
+
 - Roles: student, tutor, admin
 - JWT access token (short-lived)
 - Refresh token (stored securely in DB)
@@ -30,6 +32,7 @@ Tech Stack:
 - Password reset via secure token
 
 **2. Tutor Verification System**
+
 - Tutors upload verification documents
 - Verification states:
   - pending
@@ -43,7 +46,8 @@ Lifecycle:
 Student → Send Request → Multiple Tutors Receive → Tutor Approves/Rejects →
 If Approved → Booking Created → 2-Day Trial Activated → Payment Required After Trial
 Requirements:
-- Student cannot abuse trial (track trial usage in DB)
+
+- Student cannot abuse trial (track trial usage in Database)
 - Multiple tutors per request
 - Tutors can approve multiple students
 - Booking entity created after approval
@@ -55,6 +59,7 @@ Requirements:
   - cancelled
 
 **4. Courses**
+
 - Tutor-specific
 - Linked to:
   - Education level (O Level, Matric, FSC, etc.)
@@ -64,6 +69,7 @@ Requirements:
 - Admin can view all
 
 **5. Filtering & Search**
+
 - Filter tutors by:
   - City
   - Subject
@@ -77,6 +83,7 @@ Requirements:
   - Search API
 
 **6. Admin Panel**
+
 - View tutor list
 - View student list
 - Temporary/permanent blocking
