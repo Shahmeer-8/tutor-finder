@@ -19,7 +19,7 @@ Tech Stack:
 
 **Core Features**
 
-_Authentication & Authorization_
+1. Authentication & Authorization
 
 - Roles: student, tutor, admin
 - JWT access token (short-lived)
@@ -30,3 +30,13 @@ _Authentication & Authorization_
   - Immediately logged out
   - Prevented from login
 - Password reset via secure token
+
+2. Tutor Verification System
+
+- Tutors upload verification documents
+- Verification states:
+  - pending
+  - verified
+  - rejected
+- Admin manually approves/rejects
+- Verification badge shown on profile
