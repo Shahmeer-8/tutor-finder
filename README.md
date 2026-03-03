@@ -11,51 +11,61 @@ Overall, aims to facilitate effective learning by bridging the gap between stude
 ## Frontend Requirements:
 
 **User Interface**
-- NavBar 
+
+- NavBar
 - Home Page
-- About Page 
+- About Page
 - Tutor Page
 - Footer
 - Terms & Conditions for Tutors
 - Terms & Conditions For Students
 
 **Authentication**
+
 - Signup Page for Tutors/Student
 - Login Page for Tutor/Student/Admin
 - Forget Password Page
 
 **User/Student Module**
+
 - View Tutors (from Tutor Page)
 - View Tutor Details (from Tutor Page)
 - Send request for subject tution (from Tutor Page)
 
 **Student Dashboard**
-  - See result against request (pending/approved/rejected)
-  - Delete/update request before approving.
-  - Modify/Update Profile
+
+- See result against request (pending/approved/rejected)
+- Delete/update request before approving.
+- Modify/Update Profile
 
 **Tutor Dashboard**
+
 - SignUp/Login
 - Dashboard
   - List of Courses (CRUD)
-  - List of Rrequests with action of just Approve/Reject. 
+  - List of Rrequests with action of just Approve/Reject.
   - Modify/Update Profile
- 
+
 **Admin Dashboard**
+
 - Login
 - Dashboard
   - Tutor List
+  - Student List
   - Blocked Tutors List
+  - Student Tutors List
   - Courses List
   - Requests List
 
 **Reference**
-  - https://github.com/sikander-nawaz/TutorFinder-UI.git 
-  - Documentation (read chapter 6 for frontend)
-  - Run project for Tutor and Admin Dashboard Panel (on your local server)
-  - Additional Reference: [TheTutors.pk](https://thetutors.pk/), [Tutorer](https://tutorer.com/)
+
+- https://github.com/sikander-nawaz/TutorFinder-UI.git
+- Documentation (read chapter 6 for frontend)
+- Run project for Tutor and Admin Dashboard Panel (on your local server)
+- Additional Reference: [TheTutors.pk](https://thetutors.pk/), [Tutorer](https://tutorer.com/)
 
 **Note**
-  - Don't push code directly in `main` branch. Always use your own created branch to add code in this repo.
-  - Your code will be merged after a detailed review.
-  - You can change Frontend/UI according to your expertise for a better experience.
+
+- Don't push code directly in `main` branch. Always use your own created branch to add code in this repo.
+- Your code will be merged after a detailed review.
+- You can change Frontend/UI according to your expertise for a better experience.
