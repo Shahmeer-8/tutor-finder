@@ -40,3 +40,22 @@ Tech Stack:
   - rejected
 - Admin manually approves/rejects
 - Verification badge shown on profile
+
+3. Tuition Request & Booking Flow
+
+Lifecycle:
+Student → Send Request → Multiple Tutors Receive → Tutor Approves/Rejects →
+If Approved → Booking Created → 2-Day Trial Activated → Payment Required After Trial
+
+Requirements:
+
+- Student cannot abuse trial (track trial usage in DB)
+- Multiple tutors per request
+- Tutors can approve multiple students
+- Booking entity created after approval
+- Payment integration (Stripe recommended)
+- Booking status:
+  - trial_active
+  - trial_expired
+  - paid
+  - cancelled
