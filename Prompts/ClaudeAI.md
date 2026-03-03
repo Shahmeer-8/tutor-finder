@@ -16,3 +16,17 @@ Tech Stack:
 - Validation: express-validator
 - API style: REST
 - Deployment: Vercel (frontend) + local backend
+
+**Core Features**
+
+_Authentication & Authorization_
+
+- Roles: student, tutor, admin
+- JWT access token (short-lived)
+- Refresh token (stored securely in DB)
+- Email verification required before login
+- Role-based access control middleware
+- Blocked users:
+- Immediately logged out
+- Prevented from login
+- Password reset via secure token
