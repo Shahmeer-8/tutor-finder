@@ -20,29 +20,34 @@ Overall, aims to facilitate effective learning by bridging the gap between stude
 - Terms & Conditions For Students
 
 **Authentication**
-- Signup Page for Tutors
-- Login Page
+- Signup Page for Tutors/Student
+- Login Page for Tutor/Student/Admin
 - Forget Password Page
 
-**User Module**
+**User/Student Module**
 - View Tutors (from Tutor Page)
-- View Tutor Details
-- Send Inquiry
+- View Tutor Details (from Tutor Page)
+- Send request for subject tution (from Tutor Page)
 
-**Tutor Module**
+**Student Dashboard**
+  - See result against request (pending/approved/rejected)
+  - Delete/update request before approving.
+  - Modify/Update Profile
+
+**Tutor Dashboard**
 - SignUp/Login
 - Dashboard
   - List of Courses (CRUD)
-  - List of Inquires/requests (Read)
+  - List of Rrequests with action of just Approve/Reject. 
   - Modify/Update Profile
  
-**Admin Module**
+**Admin Dashboard**
 - Login
 - Dashboard
   - Tutor List
   - Blocked Tutors List
   - Courses List
-  - Inquires/Requests List
+  - Requests List
 
 **Reference**
   - https://github.com/sikander-nawaz/TutorFinder-UI.git 
