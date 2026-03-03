@@ -27,6 +27,6 @@ _Authentication & Authorization_
 - Email verification required before login
 - Role-based access control middleware
 - Blocked users:
-- Immediately logged out
-- Prevented from login
+  - Immediately logged out
+  - Prevented from login
 - Password reset via secure token
