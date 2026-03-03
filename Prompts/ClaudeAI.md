@@ -99,3 +99,20 @@ Filter tutors by:
   - active tutors
   - pending verifications
   - active trials
+
+**Required Output Structure**
+
+1. High-level architecture diagram (text-based)
+2. Database Schema Design (Mongoose models)
+3. Folder Structure (clean MVC)
+4. Middleware structure (RBAC, Auth, Error Handling)
+5. REST API endpoint definitions
+6. Complete backend production-ready code
+7. Stripe payment integration
+8. Email verification flow
+9. Refresh token rotation
+10. Security best practices
+11. Deployment steps for Vercel
+12. API documentation in structured format
+
+Do NOT simplify. Produce scalable production-grade code with modular architecture.
