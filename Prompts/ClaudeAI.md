@@ -59,3 +59,13 @@ Requirements:
   - trial_expired
   - paid
   - cancelled
+
+4. Courses
+
+- Tutor-specific
+- Linked to:
+  - Education level (O Level, Matric, FSC, etc.)
+  - City (dynamic city collection)
+  - Mode (online/home)
+- CRUD by tutor
+- Admin can view all
