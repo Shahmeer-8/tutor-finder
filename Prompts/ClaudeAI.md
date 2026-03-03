@@ -72,14 +72,30 @@ Requirements:
 
 5. Filtering & Search
 
-- Filter tutors by:
-  - City
-  - Subject
-  - Mode
-  - Education level
-  - Rating
-  - Verified badge
-- Include:
-  - Pagination
-  - Sorting
-  - Search API
+Filter tutors by:
+
+- City
+- Subject
+- Mode
+- Education level
+- Rating
+- Verified badge
+  Include:
+- Pagination
+- Sorting
+- Search API
+
+6. Admin Panel
+   Admin capabilities:
+
+- View tutor list
+- View student list
+- Temporary/permanent blocking
+- Manage courses
+- View all requests
+- View all bookings
+- Platform analytics:
+  - total users
+  - active tutors
+  - pending verifications
+  - active trials
