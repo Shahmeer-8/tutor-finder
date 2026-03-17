@@ -1,57 +1,55 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { useAuth, withAuth } from '../../../context/AuthContext';
-import { DashboardSidebar } from '../../../components/dashboard/Sidebar';
-import { requestService } from '../../../services/requestService';
-import { TutorRequest } from '../../../types/request';
-import { Badge } from '../../../components/ui/Badge';
-import { Button } from '../../../components/ui/Button';
-import { Card, CardContent, CardHeader, CardTitle } from '../../../components/ui/Card';
-import { Input } from '../../../components/ui/Input';
+import React, { useState, useEffect } from "react";
+import { useAuth, withAuth } from "../../../context/AuthContext";
+import { useRequest } from "../../../context/RequestContext";
+import { DashboardSidebar } from "../../../components/dashboard/Sidebar";
+import { TutorRequest } from "../../../types/request";
+import { Badge } from "../../../components/ui/Badge";
+import { Button } from "../../../components/ui/Button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../../components/ui/Card";
 
 function StudentDashboardPage() {
   const { user } = useAuth();
-  const [requests, setRequests] = useState<TutorRequest[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
+  const {
+    requests,
+    isLoading,
+    error,
+    fetchStudentRequests,
+    updateRequest,
+    deleteRequest,
+  } = useRequest();
 
   // Edit Modal State
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [selectedRequest, setSelectedRequest] = useState<TutorRequest | null>(null);
-  const [editMessage, setEditMessage] = useState('');
+  const [selectedRequest, setSelectedRequest] = useState<TutorRequest | null>(
+    null,
+  );
+  const [editMessage, setEditMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    fetchRequests();
-  }, []);
-
-  const fetchRequests = async () => {
-    setIsLoading(true);
-    try {
-      const data = await requestService.getMyRequests();
-      setRequests(data.requests);
-    } catch (err: any) {
-      setError(err.message || 'Failed to load requests');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    fetchStudentRequests();
+  }, [fetchStudentRequests]);
 
   const handleDelete = async (requestId: string) => {
-    if (!window.confirm('Are you sure you want to delete this request?')) return;
-    
+    if (!window.confirm("Are you sure you want to delete this request?"))
+      return;
     try {
-      await requestService.deleteRequest(requestId);
-      setRequests(requests.filter(req => req._id !== requestId));
-    } catch (err: any) {
-      alert(err.message || 'Failed to delete request');
+      await deleteRequest(requestId);
+    } catch (err) {
+      // Error handled by context or can add toast here
     }
   };
 
   const openEditModal = (request: TutorRequest) => {
     setSelectedRequest(request);
-    setEditMessage(request.message || '');
+    setEditMessage(request.message || "");
     setIsEditModalOpen(true);
   };
 
@@ -59,13 +57,10 @@ function StudentDashboardPage() {
     if (!selectedRequest) return;
     setIsSubmitting(true);
     try {
-      const { request } = await requestService.updateRequest(selectedRequest._id, { message: editMessage });
-      
-      // Update local state
-      setRequests(requests.map(req => req._id === request._id ? request : req));
+      await updateRequest(selectedRequest._id, { message: editMessage });
       setIsEditModalOpen(false);
-    } catch (err: any) {
-      alert(err.message || 'Failed to update request');
+    } catch (err) {
+      // Error handled by context
     } finally {
       setIsSubmitting(false);
     }
@@ -73,24 +68,31 @@ function StudentDashboardPage() {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'pending': return <Badge variant="warning">Pending</Badge>;
-      case 'approved': return <Badge variant="info">Approved</Badge>;
-      case 'trial': return <Badge variant="info">Trial Active</Badge>;
-      case 'completed': return <Badge variant="success">Completed</Badge>;
-      case 'rejected': return <Badge variant="error">Rejected</Badge>;
-      default: return <Badge>{status}</Badge>;
+      case "pending":
+        return <Badge variant="warning">Pending</Badge>;
+      case "approved":
+        return <Badge variant="info">Approved</Badge>;
+      case "trial":
+        return <Badge variant="info">Trial Active</Badge>;
+      case "completed":
+        return <Badge variant="success">Completed</Badge>;
+      case "rejected":
+        return <Badge variant="error">Rejected</Badge>;
+      default:
+        return <Badge>{status}</Badge>;
     }
   };
 
   return (
     <div className="flex flex-col md:flex-row min-h-[calc(100vh-4rem)] bg-gray-50">
       <DashboardSidebar role="student" />
-      
+
       <main className="flex-1 p-6 md:p-8">
         <div className="max-w-5xl mx-auto space-y-8">
-          
           <div className="flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-gray-900">Welcome, {user?.name}</h1>
+            <h1 className="text-2xl font-bold text-gray-900">
+              Welcome, {user?.name}
+            </h1>
           </div>
 
           {error && (
@@ -126,13 +128,22 @@ function StudentDashboardPage() {
                     </thead>
                     <tbody className="divide-y border-t border-gray-100 divide-gray-100">
                       {requests.map((req) => (
-                        <tr key={req._id} className="hover:bg-gray-50/50 transition-colors">
+                        <tr
+                          key={req._id}
+                          className="hover:bg-gray-50/50 transition-colors"
+                        >
                           <td className="px-6 py-4">
-                            <div className="font-medium text-gray-900">{req.tutor.name}</div>
+                            <div className="font-medium text-gray-900">
+                              {req.tutor.name}
+                            </div>
                           </td>
                           <td className="px-6 py-4">
-                            <div className="font-medium text-gray-900">{req.course.subject}</div>
-                            <div className="text-xs text-gray-500">{req.course.classOrGrade} • ${req.course.fee}</div>
+                            <div className="font-medium text-gray-900">
+                              {req.course.subject}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              {req.course.classOrGrade} • ${req.course.fee}
+                            </div>
                           </td>
                           <td className="px-6 py-4">
                             {getStatusBadge(req.status)}
@@ -141,15 +152,15 @@ function StudentDashboardPage() {
                             {new Date(req.createdAt).toLocaleDateString()}
                           </td>
                           <td className="px-6 py-4 text-right space-x-3">
-                            {req.status === 'pending' && (
+                            {req.status === "pending" && (
                               <>
-                                <button 
+                                <button
                                   onClick={() => openEditModal(req)}
                                   className="text-blue-600 hover:text-blue-800 font-medium"
                                 >
                                   Edit
                                 </button>
-                                <button 
+                                <button
                                   onClick={() => handleDelete(req._id)}
                                   className="text-red-600 hover:text-red-800 font-medium"
                                 >
@@ -157,11 +168,15 @@ function StudentDashboardPage() {
                                 </button>
                               </>
                             )}
-                            {req.status === 'trial' && (
-                              <Button variant="outline" size="sm">Go to Chat</Button>
+                            {req.status === "trial" && (
+                              <Button variant="outline" size="sm">
+                                Go to Chat
+                              </Button>
                             )}
-                            {req.status === 'completed' && !req.hasPaid && (
-                              <Button variant="primary" size="sm">Pay Now</Button>
+                            {req.status === "completed" && !req.hasPaid && (
+                              <Button variant="primary" size="sm">
+                                Pay Now
+                              </Button>
                             )}
                           </td>
                         </tr>
@@ -180,10 +195,14 @@ function StudentDashboardPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="bg-white rounded-xl shadow-xl w-full max-w-md overflow-hidden">
             <div className="p-6 border-b border-gray-100">
-              <h3 className="text-lg font-bold text-gray-900">Edit Request Message</h3>
+              <h3 className="text-lg font-bold text-gray-900">
+                Edit Request Message
+              </h3>
             </div>
             <div className="p-6 space-y-4">
-              <label className="block text-sm font-medium text-gray-700">Message</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Message
+              </label>
               <textarea
                 className="w-full border border-gray-300 rounded-md shadow-sm p-3 text-sm focus:ring-blue-500 focus:border-blue-500 outline-none"
                 rows={4}
@@ -193,10 +212,18 @@ function StudentDashboardPage() {
               />
             </div>
             <div className="p-6 border-t border-gray-100 bg-gray-50 flex gap-3 justify-end">
-              <Button variant="outline" onClick={() => setIsEditModalOpen(false)} disabled={isSubmitting}>
+              <Button
+                variant="outline"
+                onClick={() => setIsEditModalOpen(false)}
+                disabled={isSubmitting}
+              >
                 Cancel
               </Button>
-              <Button variant="primary" onClick={handleUpdate} isLoading={isSubmitting}>
+              <Button
+                variant="primary"
+                onClick={handleUpdate}
+                isLoading={isSubmitting}
+              >
                 Save Changes
               </Button>
             </div>
@@ -208,4 +235,4 @@ function StudentDashboardPage() {
 }
 
 // Protect this route, allowing only 'student' role
-export default withAuth(StudentDashboardPage, ['student']);
+export default withAuth(StudentDashboardPage, ["student"]);
