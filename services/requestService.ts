@@ -85,4 +85,39 @@ export const requestService = {
 
     return handleResponse<void>(response);
   },
+  /**
+   * Get all incoming requests for the logged-in tutor
+   */
+  async getTutorRequests(): Promise<{ requests: TutorRequest[] }> {
+    const response = await fetch(`${API_URL}/requests/tutor`, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    return handleResponse<{ requests: TutorRequest[] }>(response);
+  },
+
+  /**
+   * Approve a pending request (Tutor only)
+   */
+  async approveRequest(requestId: string): Promise<{ request: TutorRequest }> {
+    const response = await fetch(`${API_URL}/requests/${requestId}/approve`, {
+      method: "POST",
+      credentials: "include",
+    });
+
+    return handleResponse<{ request: TutorRequest }>(response);
+  },
+
+  /**
+   * Reject a pending request (Tutor only)
+   */
+  async rejectRequest(requestId: string): Promise<{ request: TutorRequest }> {
+    const response = await fetch(`${API_URL}/requests/${requestId}/reject`, {
+      method: "POST",
+      credentials: "include",
+    });
+
+    return handleResponse<{ request: TutorRequest }>(response);
+  },
 };
