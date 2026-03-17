@@ -1,27 +1,27 @@
-import { User, AuthResponse } from '../types/auth';
+import { User, AuthResponse } from "../types/auth";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
 /**
  * Handle API responses and throw standard errors
  */
 async function handleResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
-    let errorMessage = 'An unexpected error occurred';
+    let errorMessage = "An unexpected error occurred";
     try {
       const errorData = await response.json();
       errorMessage = errorData.message || errorMessage;
-    } catch (e) {
+    } catch (e: any) {
       // If parsing JSON fails, keep default error
     }
     throw new Error(errorMessage);
   }
-  
+
   // Handle 204 No Content
   if (response.status === 204) {
     return {} as T;
   }
-  
+
   return response.json();
 }
 
@@ -34,13 +34,13 @@ export const authService = {
    */
   async login(email: string, password: string): Promise<AuthResponse> {
     const response = await fetch(`${API_URL}/auth/login`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ email, password }),
       // Important for sending/receiving HTTP-only cookies
-      credentials: 'include', 
+      credentials: "include",
     });
 
     return handleResponse<AuthResponse>(response);
@@ -51,12 +51,12 @@ export const authService = {
    */
   async signup(data: any): Promise<AuthResponse> {
     const response = await fetch(`${API_URL}/auth/signup`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
-      credentials: 'include',
+      credentials: "include",
     });
 
     return handleResponse<AuthResponse>(response);
@@ -67,8 +67,8 @@ export const authService = {
    */
   async logout(): Promise<void> {
     const response = await fetch(`${API_URL}/auth/logout`, {
-      method: 'POST',
-      credentials: 'include',
+      method: "POST",
+      credentials: "include",
     });
 
     return handleResponse<void>(response);
@@ -79,9 +79,9 @@ export const authService = {
    */
   async forgotPassword(email: string): Promise<{ message: string }> {
     const response = await fetch(`${API_URL}/auth/forgot-password`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ email }),
     });
@@ -94,10 +94,10 @@ export const authService = {
    */
   async getCurrentUser(): Promise<User> {
     const response = await fetch(`${API_URL}/auth/me`, {
-      method: 'GET',
-      credentials: 'include',
+      method: "GET",
+      credentials: "include",
     });
 
     return handleResponse<User>(response);
-  }
+  },
 };
