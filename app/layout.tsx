@@ -5,6 +5,7 @@ import { Footer } from "@/components/layout/Footer";
 import { AuthProvider } from "@/context/AuthContext";
 import { RequestProvider } from "@/context/RequestContext";
 import { ChatProvider } from "@/context/ChatContext";
+import { ToastProvider } from "@/context/ToastContext";
 
 // Assuming global CSS contains Tailwind directives
 // import '@/app/globals.css';
@@ -23,17 +24,19 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="flex flex-col min-h-screen bg-gray-50 text-gray-900 font-sans antialiased">
-        <AuthProvider>
-          <RequestProvider>
-            <ChatProvider>
-              <Navbar />
+        <ToastProvider>
+          <AuthProvider>
+            <RequestProvider>
+              <ChatProvider>
+                <Navbar />
 
-              <main className="flex-grow flex flex-col">{children}</main>
+                <main className="flex-grow flex flex-col">{children}</main>
 
-              <Footer />
-            </ChatProvider>
-          </RequestProvider>
-        </AuthProvider>
+                <Footer />
+              </ChatProvider>
+            </RequestProvider>
+          </AuthProvider>
+        </ToastProvider>
       </body>
     </html>
   );
