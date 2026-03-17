@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background: #2ecc71; color: white; padding: 10px 20px; text-align: center; }
+    .content { padding: 20px; border: 1px solid #ddd; }
+    .receipt { background: #f9f9f9; padding: 15px; margin: 15px 0; border-radius: 5px; }
+    .footer { text-align: center; margin-top: 20px; font-size: 12px; color: #888; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2>Payment Successful!</h2>
+    </div>
+    <div class="content">
+      <p>Hello {{studentName}},</p>
+      <p>Your payment for the course <strong>{{courseSubject}}</strong> has been processed successfully.</p>
+      
+      <div class="receipt">
+        <p><strong>Amount Paid:</strong> ${{amount}}</p>
+        <p><strong>Tutor:</strong> {{tutorName}}</p>
+        <p><strong>Transaction ID:</strong> {{transactionId}}</p>
+      </div>
+
+      <p>Full chat capabilities, including file and image sharing, are now enabled for this course. Happy learning!</p>
+    </div>
+    <div class="footer">
+      <p>Thank you for using TutorFinder!</p>
+    </div>
+  </div>
+</body>
+</html>

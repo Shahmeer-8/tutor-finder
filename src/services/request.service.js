@@ -1,8 +1,10 @@
-const httpStatus = require('http-status');
-const requestRepository = require('../repositories/request.repository');
-const { Course } = require('../models');
-const ApiError = require('../utils/ApiError');
-const moment = require('moment');
+const httpStatus = require("http-status");
+const requestRepository = require("../repositories/request.repository");
+const { Course } = require("../models");
+const ApiError = require("../utils/ApiError");
+const moment = require("moment");
+
+const emailService = require("./email.service");
 
 /**
  * Create a request (Student sends a request)
@@ -11,26 +13,37 @@ const moment = require('moment');
  */
 const createRequest = async (requestBody) => {
   const { student, course: courseId } = requestBody;
-  
+
   // Get course to know the subject
   const course = await Course.findById(courseId);
   if (!course) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Course not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "Course not found");
   }
 
   // Set the tutor implicitly from the course
   requestBody.tutor = course.tutor;
 
   // Rule 1: Student can send max 3 requests per subject
-  const activeRequests = await requestRepository.getStudentRequestsBySubject(student, course.subject);
+  const activeRequests = await requestRepository.getStudentRequestsBySubject(
+    student,
+    course.subject,
+  );
   if (activeRequests.length >= 3) {
-    throw new ApiError(httpStatus.BAD_REQUEST, `Maximum limit of 3 requests reached for subject: ${course.subject}`);
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      `Maximum limit of 3 requests reached for subject: ${course.subject}`,
+    );
   }
 
   // Ensure student isn't requesting the same course twice while pending/trial
-  const alreadyRequested = activeRequests.some(req => req.course._id.toString() === courseId.toString());
+  const alreadyRequested = activeRequests.some(
+    (req) => req.course._id.toString() === courseId.toString(),
+  );
   if (alreadyRequested) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'You have already sent a request for this specific course');
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      "You have already sent a request for this specific course",
+    );
   }
 
   return requestRepository.createRequest(requestBody);
@@ -45,18 +58,24 @@ const createRequest = async (requestBody) => {
  */
 const updateRequest = async (requestId, updateBody, userId) => {
   const request = await requestRepository.getRequestById(requestId);
-  
+
   if (!request) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Request not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "Request not found");
   }
 
   // Rule 6: Student can update/delete request only before approval (status === 'pending')
-  if (request.status !== 'pending') {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot update a request that has already been processed');
+  if (request.status !== "pending") {
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      "Cannot update a request that has already been processed",
+    );
   }
 
   if (request.student._id.toString() !== userId.toString()) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'You do not have permission to update this request');
+    throw new ApiError(
+      httpStatus.FORBIDDEN,
+      "You do not have permission to update this request",
+    );
   }
 
   // Only allow updating message
@@ -73,18 +92,24 @@ const updateRequest = async (requestId, updateBody, userId) => {
  */
 const deleteRequest = async (requestId, userId) => {
   const request = await requestRepository.getRequestById(requestId);
-  
+
   if (!request) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Request not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "Request not found");
   }
 
   // Rule 6: Only before approval
-  if (request.status !== 'pending') {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot delete a request that has already been processed');
+  if (request.status !== "pending") {
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      "Cannot delete a request that has already been processed",
+    );
   }
 
   if (request.student._id.toString() !== userId.toString()) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'You do not have permission to delete this request');
+    throw new ApiError(
+      httpStatus.FORBIDDEN,
+      "You do not have permission to delete this request",
+    );
   }
 
   return requestRepository.deleteRequestById(requestId);
@@ -98,31 +123,52 @@ const deleteRequest = async (requestId, userId) => {
  */
 const approveRequest = async (requestId, tutorId) => {
   const request = await requestRepository.getRequestById(requestId);
-  
+
   if (!request) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Request not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "Request not found");
   }
 
   if (request.tutor._id.toString() !== tutorId.toString()) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'You do not have permission to approve this request');
+    throw new ApiError(
+      httpStatus.FORBIDDEN,
+      "You do not have permission to approve this request",
+    );
   }
 
-  if (request.status !== 'pending') {
-    throw new ApiError(httpStatus.BAD_REQUEST, `Cannot approve a request with status: ${request.status}`);
+  if (request.status !== "pending") {
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      `Cannot approve a request with status: ${request.status}`,
+    );
   }
 
   // Rule 4: Trial Starts when tutor approves. Lasts exactly 48 hours.
   const trialStartDate = moment().toDate();
-  const trialEndDate = moment().add(48, 'hours').toDate();
+  const trialEndDate = moment().add(48, "hours").toDate();
 
   const updatedRequest = await requestRepository.updateRequestById(requestId, {
-    status: 'trial', // pending -> trial (approving initiates trial)
+    status: "trial", // pending -> trial (approving initiates trial)
     trialStartDate,
-    trialEndDate
+    trialEndDate,
   });
 
   // Rule 2: When one tutor approves, other requests for the same subject are auto-rejected
-  await requestRepository.rejectOtherRequests(request.student._id, request.course.subject, requestId);
+  await requestRepository.rejectOtherRequests(
+    request.student._id,
+    request.course.subject,
+    requestId,
+  );
+
+  // Send Email Notification
+  emailService
+    .sendRequestApprovedEmail(request.student.email, {
+      studentName: request.student.name,
+      tutorName: request.tutor.name,
+      courseSubject: request.course.subject,
+      trialEndDate: moment(trialEndDate).format("MMMM Do YYYY, h:mm a"),
+      dashboardUrl: `${process.env.CLIENT_URL || "http://localhost:3000"}/dashboard`,
+    })
+    .catch((err) => console.error("Failed to send approval email:", err));
 
   return updatedRequest;
 };
@@ -135,20 +181,38 @@ const approveRequest = async (requestId, tutorId) => {
  */
 const rejectRequest = async (requestId, tutorId) => {
   const request = await requestRepository.getRequestById(requestId);
-  
+
   if (!request) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Request not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "Request not found");
   }
 
   if (request.tutor._id.toString() !== tutorId.toString()) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'You do not have permission to reject this request');
+    throw new ApiError(
+      httpStatus.FORBIDDEN,
+      "You do not have permission to reject this request",
+    );
   }
 
-  if (request.status !== 'pending') {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Only pending requests can be rejected');
+  if (request.status !== "pending") {
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      "Only pending requests can be rejected",
+    );
   }
 
-  return requestRepository.updateRequestById(requestId, { status: 'rejected' });
+  const updatedRequest = await requestRepository.updateRequestById(requestId, {
+    status: "rejected",
+  });
+
+  // Send Email Notification
+  emailService
+    .sendRequestRejectedEmail(request.student.email, {
+      studentName: request.student.name,
+      courseSubject: request.course.subject,
+    })
+    .catch((err) => console.error("Failed to send rejection email:", err));
+
+  return updatedRequest;
 };
 
 /**
@@ -159,17 +223,19 @@ const rejectRequest = async (requestId, tutorId) => {
  */
 const completeTrial = async (requestId) => {
   const request = await requestRepository.getRequestById(requestId);
-  
+
   if (!request) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Request not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "Request not found");
   }
 
-  if (request.status !== 'trial') {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Request is not in trial phase');
+  if (request.status !== "trial") {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Request is not in trial phase");
   }
 
   // Rule 4: After expiry, move to payment phase (status 'completed' means trial complete, ready for payment)
-  return requestRepository.updateRequestById(requestId, { status: 'completed' });
+  return requestRepository.updateRequestById(requestId, {
+    status: "completed",
+  });
 };
 
 module.exports = {
@@ -178,5 +244,5 @@ module.exports = {
   deleteRequest,
   approveRequest,
   rejectRequest,
-  completeTrial
+  completeTrial,
 };

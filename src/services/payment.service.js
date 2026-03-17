@@ -1,12 +1,15 @@
-const httpStatus = require('http-status');
-const Stripe = require('stripe');
-const config = require('../config/env');
-const paymentRepository = require('../repositories/payment.repository');
-const requestRepository = require('../repositories/request.repository');
-const { TutorProfile, Request } = require('../models');
-const ApiError = require('../utils/ApiError');
+const httpStatus = require("http-status");
+const Stripe = require("stripe");
+const config = require("../config/env");
+const paymentRepository = require("../repositories/payment.repository");
+const requestRepository = require("../repositories/request.repository");
+const { TutorProfile, Request, User } = require("../models");
+const ApiError = require("../utils/ApiError");
+const emailService = require("./email.service");
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_dummy_key_replace_in_env');
+const stripe = new Stripe(
+  process.env.STRIPE_SECRET_KEY || "sk_test_dummy_key_replace_in_env",
+);
 
 /**
  * Initialize a Stripe checkout session for a course fee
@@ -16,33 +19,42 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_dummy_key_re
  */
 const createCheckoutSession = async (requestId, studentId) => {
   const request = await requestRepository.getRequestById(requestId);
-  
+
   if (!request) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Request not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "Request not found");
   }
 
   if (request.student._id.toString() !== studentId.toString()) {
-    throw new ApiError(httpStatus.FORBIDDEN, 'You do not have permission to pay for this request');
+    throw new ApiError(
+      httpStatus.FORBIDDEN,
+      "You do not have permission to pay for this request",
+    );
   }
 
   // Ensure request is in a state where payment is allowed (completed trial)
-  if (request.status !== 'completed' && request.status !== 'trial') {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Cannot process payment for this request in its current state');
+  if (request.status !== "completed" && request.status !== "trial") {
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      "Cannot process payment for this request in its current state",
+    );
   }
 
   if (request.hasPaid) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Payment has already been made for this course');
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      "Payment has already been made for this course",
+    );
   }
 
   const courseFee = request.course.fee;
-  
+
   // Create Stripe Checkout Session
   const session = await stripe.checkout.sessions.create({
-    payment_method_types: ['card'],
+    payment_method_types: ["card"],
     line_items: [
       {
         price_data: {
-          currency: 'usd', // Could be made dynamic
+          currency: "usd", // Could be made dynamic
           product_data: {
             name: `Tutor Course: ${request.course.subject}`,
             description: `Payment for tutor ${request.tutor.name}`,
@@ -52,10 +64,10 @@ const createCheckoutSession = async (requestId, studentId) => {
         quantity: 1,
       },
     ],
-    mode: 'payment',
+    mode: "payment",
     // These URLs would typically come from config/env
-    success_url: `${process.env.CLIENT_URL || 'http://localhost:3000'}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${process.env.CLIENT_URL || 'http://localhost:3000'}/payment/cancel`,
+    success_url: `${process.env.CLIENT_URL || "http://localhost:3000"}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${process.env.CLIENT_URL || "http://localhost:3000"}/payment/cancel`,
     metadata: {
       requestId: request._id.toString(),
       studentId: studentId.toString(),
@@ -72,7 +84,7 @@ const createCheckoutSession = async (requestId, studentId) => {
     course: request.course._id,
     amount: courseFee,
     commission: 10, // 10% platform fee
-    status: 'pending',
+    status: "pending",
     transactionId: session.id,
   });
 
@@ -95,9 +107,9 @@ const handleWebhook = async (signature, rawBody) => {
   }
 
   // Handle the checkout.session.completed event
-  if (event.type === 'checkout.session.completed') {
+  if (event.type === "checkout.session.completed") {
     const session = event.data.object;
-    
+
     // Fulfill the purchase...
     await fulfillOrder(session);
   }
@@ -111,16 +123,17 @@ const handleWebhook = async (signature, rawBody) => {
  */
 const fulfillOrder = async (session) => {
   const transactionId = session.id;
-  const payment = await paymentRepository.getPaymentByTransactionId(transactionId);
-  
-  if (!payment || payment.status === 'completed') {
+  const payment =
+    await paymentRepository.getPaymentByTransactionId(transactionId);
+
+  if (!payment || payment.status === "completed") {
     return; // Already processed or not found
   }
 
   // 1. Mark payment as completed
-  await paymentRepository.updatePaymentById(payment._id, { 
-    status: 'completed',
-    paymentMethod: 'card' // Based on stripe session
+  await paymentRepository.updatePaymentById(payment._id, {
+    status: "completed",
+    paymentMethod: "card", // Based on stripe session
   });
 
   // 2. Update Request to show payment is complete (Enables full chat features)
@@ -130,11 +143,29 @@ const fulfillOrder = async (session) => {
   // 3. Add net amount to Tutor's balance
   const tutorId = session.metadata.tutorId;
   const tutorProfile = await TutorProfile.findOne({ user: tutorId });
-  
+
   if (tutorProfile) {
     tutorProfile.balance += payment.netAmount;
     tutorProfile.totalEarnings += payment.netAmount;
     await tutorProfile.save();
+  }
+
+  // 4. Send Payment Success Email
+  try {
+    const student = await User.findById(payment.student);
+    const request = await Request.findById(requestId).populate("course tutor");
+
+    if (student && request) {
+      await emailService.sendPaymentSuccessEmail(student.email, {
+        studentName: student.name,
+        courseSubject: request.course.subject,
+        amount: payment.amount,
+        tutorName: request.tutor.name,
+        transactionId: payment.transactionId,
+      });
+    }
+  } catch (err) {
+    console.error("Failed to send payment success email:", err);
   }
 };
 
@@ -145,15 +176,15 @@ const fulfillOrder = async (session) => {
 const getTutorEarnings = async (tutorId) => {
   const profile = await TutorProfile.findOne({ user: tutorId });
   if (!profile) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Tutor profile not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "Tutor profile not found");
   }
 
   const payments = await paymentRepository.getPaymentsByTutor(tutorId);
-  
+
   return {
     balance: profile.balance,
     totalEarnings: profile.totalEarnings,
-    recentTransactions: payments.slice(0, 10) // Last 10 payments
+    recentTransactions: payments.slice(0, 10), // Last 10 payments
   };
 };
 
@@ -165,13 +196,16 @@ const getTutorEarnings = async (tutorId) => {
  */
 const processWithdrawal = async (tutorId, amount) => {
   const profile = await TutorProfile.findOne({ user: tutorId });
-  
+
   if (!profile) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Tutor profile not found');
+    throw new ApiError(httpStatus.NOT_FOUND, "Tutor profile not found");
   }
 
   if (profile.balance < amount) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Insufficient balance for withdrawal');
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      "Insufficient balance for withdrawal",
+    );
   }
 
   profile.balance -= amount;
@@ -179,11 +213,11 @@ const processWithdrawal = async (tutorId, amount) => {
 
   // In a real application, you might create a "Withdrawal" schema to track these
   // or use Stripe Connect transfers to send money to the tutor's bank account.
-  
+
   return {
     success: true,
     newBalance: profile.balance,
-    withdrawnAmount: amount
+    withdrawnAmount: amount,
   };
 };
 
@@ -191,5 +225,5 @@ module.exports = {
   createCheckoutSession,
   handleWebhook,
   getTutorEarnings,
-  processWithdrawal
+  processWithdrawal,
 };

@@ -6,4 +6,5 @@ module.exports = {
   paymentService: require("./payment.service"),
   reviewService: require("./review.service"),
   tutorService: require("./tutor.service"),
+  emailService: require("./email.service"),
 };
