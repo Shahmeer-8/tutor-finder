@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const tutorProfileSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
       unique: true,
     },
@@ -18,8 +18,8 @@ const tutorProfileSchema = new mongoose.Schema(
     ],
     verificationStatus: {
       type: String,
-      enum: ['pending', 'verified', 'rejected', 'blocked'],
-      default: 'pending',
+      enum: ["pending", "verified", "rejected", "blocked"],
+      default: "pending",
     },
     cities: [
       {
@@ -45,10 +45,18 @@ const tutorProfileSchema = new mongoose.Schema(
       type: Number, // Years of experience
       default: 0,
     },
+    balance: {
+      type: Number,
+      default: 0,
+    },
+    totalEarnings: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 // Indexes for search and relationships
@@ -57,6 +65,6 @@ tutorProfileSchema.index({ verificationStatus: 1 });
 tutorProfileSchema.index({ cities: 1 });
 tutorProfileSchema.index({ subjects: 1 });
 
-const TutorProfile = mongoose.model('TutorProfile', tutorProfileSchema);
+const TutorProfile = mongoose.model("TutorProfile", tutorProfileSchema);
 
 module.exports = TutorProfile;
