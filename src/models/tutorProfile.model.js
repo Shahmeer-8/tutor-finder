@@ -53,6 +53,18 @@ const tutorProfileSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    rating: {
+      type: Number,
+      default: 0,
+    },
+    reviewCount: {
+      type: Number,
+      default: 0,
+    },
+    featured: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
@@ -64,6 +76,7 @@ tutorProfileSchema.index({ user: 1 });
 tutorProfileSchema.index({ verificationStatus: 1 });
 tutorProfileSchema.index({ cities: 1 });
 tutorProfileSchema.index({ subjects: 1 });
+tutorProfileSchema.index({ featured: -1, rating: -1 });
 
 const TutorProfile = mongoose.model("TutorProfile", tutorProfileSchema);
 
