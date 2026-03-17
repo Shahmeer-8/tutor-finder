@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "../../../../components/ui/Card";
 import { Button } from "../../../../components/ui/Button";
+import { StatCardSkeleton } from "../../../../components/ui/Skeletons";
 import {
   BarChart,
   Bar,
@@ -67,8 +68,10 @@ function TutorEarningsPage() {
           </div>
 
           {isLoading ? (
-            <div className="p-8 flex justify-center">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <StatCardSkeleton />
+              <StatCardSkeleton />
+              <StatCardSkeleton />
             </div>
           ) : (
             <>

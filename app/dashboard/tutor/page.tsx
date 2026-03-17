@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useAuth, withAuth } from "../../../context/AuthContext";
 import { useRequest } from "../../../context/RequestContext";
+import { useToast } from "../../../context/ToastContext";
 import { DashboardSidebar } from "../../../components/dashboard/Sidebar";
 import { Badge } from "../../../components/ui/Badge";
 import { Button } from "../../../components/ui/Button";
@@ -12,6 +13,8 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../components/ui/Card";
+import { TableSkeleton } from "../../../components/ui/Skeletons";
+import { EmptyState } from "../../../components/ui/EmptyState";
 
 function TutorDashboardPage() {
   const { user } = useAuth();
@@ -23,6 +26,7 @@ function TutorDashboardPage() {
     approveRequest,
     rejectRequest,
   } = useRequest();
+  const { showToast } = useToast();
   const [processingId, setProcessingId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -33,8 +37,9 @@ function TutorDashboardPage() {
     setProcessingId(requestId);
     try {
       await approveRequest(requestId);
-    } catch (err) {
-      // Error handled by context
+      showToast("Request approved successfully", "success");
+    } catch (err: any) {
+      showToast(err.message || "Failed to approve request", "error");
     } finally {
       setProcessingId(null);
     }
@@ -46,8 +51,9 @@ function TutorDashboardPage() {
     setProcessingId(requestId);
     try {
       await rejectRequest(requestId);
-    } catch (err) {
-      // Error handled by context
+      showToast("Request rejected successfully", "info");
+    } catch (err: any) {
+      showToast(err.message || "Failed to reject request", "error");
     } finally {
       setProcessingId(null);
     }
@@ -135,13 +141,15 @@ function TutorDashboardPage() {
             </CardHeader>
             <CardContent className="p-0">
               {isLoading ? (
-                <div className="p-8 flex justify-center">
-                  <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
+                <div className="p-6">
+                  <TableSkeleton rows={3} />
                 </div>
               ) : requests.length === 0 ? (
-                <div className="p-8 text-center text-gray-500">
-                  You don't have any incoming requests right now.
-                </div>
+                <EmptyState
+                  title="No incoming requests"
+                  description="You don't have any pending requests from students right now."
+                  className="m-6"
+                />
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-sm text-gray-600">
@@ -167,10 +175,10 @@ function TutorDashboardPage() {
                           </td>
                           <td className="px-6 py-4">
                             <div className="font-medium text-gray-900">
-                              {req.course.subject}
+                              {req.course?.subject}
                             </div>
                             <div className="text-xs text-gray-500">
-                              {req.course.classOrGrade} • ${req.course.fee}
+                              {req.course?.classOrGrade} • ${req.course?.fee}
                             </div>
                           </td>
                           <td className="px-6 py-4">
@@ -208,7 +216,13 @@ function TutorDashboardPage() {
                               </div>
                             )}
                             {req.status === "trial" && (
-                              <Button variant="outline" size="sm">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() =>
+                                  (window.location.href = `/chat/${req._id}`)
+                                }
+                              >
                                 Go to Chat
                               </Button>
                             )}
@@ -227,5 +241,4 @@ function TutorDashboardPage() {
   );
 }
 
-// Protect this route, allowing only 'tutor' role
 export default withAuth(TutorDashboardPage, ["tutor"]);
