@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router } from "express"; // v2
 import authRouter from "./auth.js";
 import profileRouter from "./profile.js";
 import courseRouter from "./courses.js";
