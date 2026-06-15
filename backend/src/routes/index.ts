@@ -15,6 +15,11 @@ router.get("/health", (_req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
+// Public routes first — must be before any router that applies router.use(authenticate)
+router.use("/", tutorsRouter);
+router.use("/", reviewsRouter);
+
+// Authenticated routes
 router.use("/auth", authRouter);
 router.use("/profile", profileRouter);
 router.use("/", courseRouter);
@@ -22,7 +27,5 @@ router.use("/", chatRouter);
 router.use("/", requestRouter);
 router.use("/", earningsRouter);
 router.use("/", adminRouter);
-router.use("/", tutorsRouter);
-router.use("/", reviewsRouter);
 
 export default router;
