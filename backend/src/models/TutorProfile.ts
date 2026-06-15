@@ -1,6 +1,14 @@
 import mongoose, { Document, Schema, Types } from "mongoose";
 
 export type TutoringType = "online" | "home" | "both";
+export type TeachingMode = "online" | "home";
+
+export interface IAvailabilitySlot {
+  day: string;
+  startTime: string;
+  endTime: string;
+}
+
 export type TutorVerificationStatus =
   | "unverified"
   | "documents_submitted"
@@ -9,7 +17,11 @@ export type TutorVerificationStatus =
   | "rejected"
   | "reapplication";
 
-export type TutorDocType = "cnic_front" | "cnic_back" | "degree" | "experience_letter";
+export type TutorDocType =
+  | "cnic_front"
+  | "cnic_back"
+  | "degree"
+  | "experience_letter";
 
 export interface ITutorDocument {
   docType: TutorDocType;
@@ -25,6 +37,12 @@ export interface ITutorProfile extends Document {
   subjects: string[];
   levels: string[];
   tutoringType: TutoringType;
+  teachingModes: TeachingMode[];
+  availability: {
+    online: IAvailabilitySlot[];
+    home: IAvailabilitySlot[];
+  };
+  homeTuitionCities: string[];
   hourlyRate?: number;
   experience?: number;
   qualification?: string;
@@ -52,12 +70,26 @@ const TutorDocumentSchema = new Schema<ITutorDocument>(
     publicId: { type: String, required: true },
     uploadedAt: { type: Date, default: Date.now },
   },
-  { _id: false }
+  { _id: false },
+);
+
+const AvailabilitySlotSchema = new Schema<IAvailabilitySlot>(
+  {
+    day: { type: String, required: true },
+    startTime: { type: String, required: true },
+    endTime: { type: String, required: true },
+  },
+  { _id: false },
 );
 
 const TutorProfileSchema = new Schema<ITutorProfile>(
   {
-    userId: { type: Schema.Types.ObjectId, ref: "User", required: true, unique: true },
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      unique: true,
+    },
     bio: { type: String, trim: true },
     subjects: { type: [String], default: [] },
     levels: { type: [String], default: [] },
@@ -66,6 +98,16 @@ const TutorProfileSchema = new Schema<ITutorProfile>(
       enum: ["online", "home", "both"],
       default: "online",
     },
+    teachingModes: {
+      type: [String],
+      enum: ["online", "home"],
+      default: ["online"],
+    },
+    availability: {
+      online: { type: [AvailabilitySlotSchema], default: [] },
+      home: { type: [AvailabilitySlotSchema], default: [] },
+    },
+    homeTuitionCities: { type: [String], default: [] },
     hourlyRate: { type: Number, min: 0 },
     experience: { type: Number, min: 0 },
     qualification: { type: String, trim: true },
@@ -90,10 +132,13 @@ const TutorProfileSchema = new Schema<ITutorProfile>(
     totalReviews: { type: Number, default: 0 },
     isProfileComplete: { type: Boolean, default: false },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 TutorProfileSchema.index({ verificationStatus: 1 });
 TutorProfileSchema.index({ subjects: 1 });
 
-export const TutorProfile = mongoose.model<ITutorProfile>("TutorProfile", TutorProfileSchema);
+export const TutorProfile = mongoose.model<ITutorProfile>(
+  "TutorProfile",
+  TutorProfileSchema,
+);

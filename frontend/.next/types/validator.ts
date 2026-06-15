@@ -81,10 +81,28 @@ type LayoutConfig<Route extends LayoutRoutes = LayoutRoutes> = {
   type __Unused = __Check
 }
 
+// Validate ../../app/dashboard/admin/courses/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/dashboard/admin/courses">> = Specific
+  const handler = {} as typeof import("../../app/dashboard/admin/courses/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../app/dashboard/admin/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/dashboard/admin">> = Specific
   const handler = {} as typeof import("../../app/dashboard/admin/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/dashboard/admin/requests/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/dashboard/admin/requests">> = Specific
+  const handler = {} as typeof import("../../app/dashboard/admin/requests/page.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check
@@ -371,10 +389,28 @@ type LayoutConfig<Route extends LayoutRoutes = LayoutRoutes> = {
   type __Unused = __Check
 }
 
+// Validate ../../src/pages/dashboard/admin/AdminCourses.tsx
+{
+  type __IsExpected<Specific extends PagesPageConfig> = Specific
+  const handler = {} as typeof import("../../src/pages/dashboard/admin/AdminCourses.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../src/pages/dashboard/admin/AdminDashboard.tsx
 {
   type __IsExpected<Specific extends PagesPageConfig> = Specific
   const handler = {} as typeof import("../../src/pages/dashboard/admin/AdminDashboard.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../src/pages/dashboard/admin/AdminRequests.tsx
+{
+  type __IsExpected<Specific extends PagesPageConfig> = Specific
+  const handler = {} as typeof import("../../src/pages/dashboard/admin/AdminRequests.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check

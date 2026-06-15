@@ -54,10 +54,47 @@ router.patch(
   adminController.scheduleInterview,
 );
 router.get(
+  "/admin/students/pending",
+  authenticate,
+  requireAdmin,
+  adminController.getPendingStudents,
+);
+router.patch(
+  "/admin/students/:id/verify",
+  authenticate,
+  requireAdmin,
+  adminController.approveStudent,
+);
+router.patch(
+  "/admin/students/:id/reject",
+  authenticate,
+  requireAdmin,
+  adminController.rejectStudent,
+);
+
+router.get(
   "/admin/requests",
   authenticate,
   requireAdmin,
   adminController.getAllRequests,
+);
+router.patch(
+  "/admin/requests/:id/accept",
+  authenticate,
+  requireAdmin,
+  adminController.acceptRequest,
+);
+router.patch(
+  "/admin/requests/:id/reject",
+  authenticate,
+  requireAdmin,
+  adminController.rejectRequest,
+);
+router.delete(
+  "/admin/requests/:id",
+  authenticate,
+  requireAdmin,
+  adminController.deleteRequest,
 );
 
 router.get(

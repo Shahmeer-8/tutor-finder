@@ -1,6 +1,8 @@
 import type { Request, Response, NextFunction } from "express";
 import { requestRepository } from "../repositories/requestRepository.js";
 import { userRepository } from "../repositories/userRepository.js";
+import { TutorProfile } from "../models/TutorProfile.js";
+import { Course } from "../models/Course.js";
 import { sendSuccess } from "../utils/response.js";
 import {
   BadRequestError,
@@ -62,8 +64,17 @@ export const requestController = {
       if (req.userRole !== "student")
         throw new ForbiddenError("Only students can create requests");
 
-      const { tutorId, subject, level, mode, message, fee, scheduledAt } =
-        req.body;
+      const {
+        tutorId,
+        courseId,
+        subject,
+        level,
+        mode,
+        message,
+        fee,
+        selectedSlot,
+        homeAddress,
+      } = req.body;
 
       if (
         !tutorId ||
@@ -75,28 +86,123 @@ export const requestController = {
       ) {
         throw new BadRequestError("Required fields missing");
       }
+      if (
+        !selectedSlot ||
+        !selectedSlot.day ||
+        !selectedSlot.startTime ||
+        !selectedSlot.endTime
+      ) {
+        throw new BadRequestError("A time slot must be selected");
+      }
+      if (mode !== "online" && mode !== "home") {
+        throw new BadRequestError("Mode must be 'online' or 'home'");
+      }
 
-      // Get student and tutor info
+      // Validate slot against course availability (if courseId provided) or profile availability
+      if (courseId) {
+        const course = await Course.findById(courseId as string).lean();
+        if (!course) throw new NotFoundError("Course not found");
+        if (course.tutorId.toString() !== (tutorId as string))
+          throw new BadRequestError("Course does not belong to this tutor");
+
+        const courseModeOk = course.mode === mode || course.mode === "both";
+        if (!courseModeOk)
+          throw new BadRequestError(
+            `This course does not support ${mode} sessions`,
+          );
+
+        const courseSlots = (course.availability?.[mode as "online" | "home"] ||
+          []) as Array<{
+          day: string;
+          startTime: string;
+          endTime: string;
+        }>;
+        const slotMatch = courseSlots.some(
+          (s) =>
+            s.day === selectedSlot.day &&
+            s.startTime === selectedSlot.startTime &&
+            s.endTime === selectedSlot.endTime,
+        );
+        if (!slotMatch)
+          throw new BadRequestError(
+            "Selected slot is not available for this course",
+          );
+      } else {
+        // Fallback: validate against tutor profile-level availability
+        const tutorProfile = await TutorProfile.findOne({
+          userId: tutorId,
+        }).lean();
+        if (!tutorProfile) throw new NotFoundError("Tutor profile not found");
+        if (
+          !tutorProfile.teachingModes ||
+          !tutorProfile.teachingModes.includes(mode)
+        )
+          throw new BadRequestError(
+            `This tutor does not offer ${mode} sessions`,
+          );
+
+        const modeSlots = (tutorProfile.availability?.[
+          mode as "online" | "home"
+        ] || []) as Array<{
+          day: string;
+          startTime: string;
+          endTime: string;
+        }>;
+        const slotMatch = modeSlots.some(
+          (s) =>
+            s.day === selectedSlot.day &&
+            s.startTime === selectedSlot.startTime &&
+            s.endTime === selectedSlot.endTime,
+        );
+        if (!slotMatch)
+          throw new BadRequestError(
+            "Selected slot is not in tutor's availability",
+          );
+      }
+
+      if (mode === "home") {
+        if (!homeAddress?.city || !homeAddress?.fullAddress) {
+          throw new BadRequestError(
+            "Home address (city and full address) is required for home sessions",
+          );
+        }
+        const tutorProfile = await TutorProfile.findOne({
+          userId: tutorId,
+        }).lean();
+        const cities: string[] = tutorProfile?.homeTuitionCities || [];
+        if (
+          cities.length > 0 &&
+          !cities
+            .map((c) => c.toLowerCase())
+            .includes(homeAddress.city.toLowerCase())
+        ) {
+          throw new BadRequestError(
+            `Tutor does not offer home tuition in ${homeAddress.city}`,
+          );
+        }
+      }
+
       const [student, tutor] = await Promise.all([
         userRepository.findById(req.userId),
         userRepository.findById(tutorId as string),
       ]);
-
       if (!student) throw new NotFoundError("Student not found");
       if (!tutor) throw new NotFoundError("Tutor not found");
 
       const request = await requestRepository.create({
         studentId: req.userId,
         tutorId: tutorId as string,
+        ...(courseId ? { courseId: courseId as string } : {}),
         studentName: student.name,
         tutorName: tutor.name,
         tutorAvatarUrl: tutor.avatarUrl,
         subject: subject as string,
         level: level as string,
-        mode: mode as "online" | "home" | "both",
+        mode: mode as "online" | "home",
+        selectedSlot,
+        ...(mode === "home" && homeAddress ? { homeAddress } : {}),
         message: message as string,
         fee: Number(fee),
-        scheduledAt: scheduledAt ? new Date(scheduledAt as string) : undefined,
       });
 
       sendSuccess({
@@ -138,7 +244,7 @@ export const requestController = {
       const updated = await requestRepository.update(id as string, {
         ...(subject && { subject: subject as string }),
         ...(level && { level: level as string }),
-        ...(mode && { mode: mode as "online" | "home" | "both" }),
+        ...(mode && { mode: mode as "online" | "home" }),
         ...(message && { message: message as string }),
         ...(fee !== undefined && { fee: Number(fee) }),
         ...(scheduledAt && { scheduledAt: new Date(scheduledAt as string) }),
@@ -185,15 +291,22 @@ export const requestController = {
 
       const updateData: Record<string, any> = { status };
 
-      // CORE RULE: When tutor approves/accepts (trial) → auto-reject all other pending
-      // requests from the same student to other tutors
-      if (status === "approved" || status === "trial") {
+      // CORE RULE: When tutor approves → require meetingLink for online; auto-reject other pending requests
+      if (status === "approved") {
+        if (existingRequest.mode === "online") {
+          const { meetingLink } = req.body as { meetingLink?: string };
+          if (!meetingLink || !meetingLink.trim()) {
+            throw new BadRequestError(
+              "A meeting link is required to accept online session requests",
+            );
+          }
+          updateData.meetingLink = meetingLink.trim();
+        }
         const trialStartedAt = new Date();
-        const trialExpiresAt = new Date(
-          trialStartedAt.getTime() + 48 * 60 * 60 * 1000,
-        ); // 48 hours
         updateData.trialStartedAt = trialStartedAt;
-        updateData.trialExpiresAt = trialExpiresAt;
+        updateData.trialExpiresAt = new Date(
+          trialStartedAt.getTime() + 48 * 60 * 60 * 1000,
+        );
 
         // Auto-reject all other pending requests from this student
         const { TutorRequest } = await import("../models/TutorRequest.js");
@@ -204,6 +317,14 @@ export const requestController = {
             status: "pending",
           },
           { $set: { status: "rejected" } },
+        );
+      }
+
+      if (status === "trial") {
+        const trialStartedAt = new Date();
+        updateData.trialStartedAt = trialStartedAt;
+        updateData.trialExpiresAt = new Date(
+          trialStartedAt.getTime() + 48 * 60 * 60 * 1000,
         );
       }
 

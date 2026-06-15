@@ -32,8 +32,16 @@ export const courseController = {
       if (req.userRole !== "tutor")
         throw new ForbiddenError("Only tutors can create courses");
 
-      const { title, subject, level, description, fee, mode, duration } =
-        req.body;
+      const {
+        title,
+        subject,
+        level,
+        description,
+        fee,
+        mode,
+        duration,
+        availability,
+      } = req.body;
 
       if (
         !title ||
@@ -56,6 +64,7 @@ export const courseController = {
         fee: Number(fee),
         mode: mode as "online" | "home" | "both",
         duration: duration as string,
+        ...(availability && { availability }),
       });
 
       sendSuccess({
@@ -86,6 +95,7 @@ export const courseController = {
         mode,
         duration,
         isActive,
+        availability,
       } = req.body;
 
       const course = await courseRepository.update(id as string, req.userId, {
@@ -97,6 +107,7 @@ export const courseController = {
         ...(mode && { mode }),
         ...(duration && { duration }),
         ...(isActive !== undefined && { isActive }),
+        ...(availability !== undefined && { availability }),
       });
 
       if (!course) throw new NotFoundError("Course not found");

@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import { User } from "../models/User.js";
 import { TutorProfile } from "../models/TutorProfile.js";
+import { StudentProfile } from "../models/StudentProfile.js";
 import { TutorRequest } from "../models/TutorRequest.js";
 import { userRepository } from "../repositories/userRepository.js";
 import { tutorProfileRepository } from "../repositories/tutorProfileRepository.js";
@@ -316,16 +317,160 @@ export const adminController = {
     }
   },
 
+  async getPendingStudents(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const profiles = await StudentProfile.find({
+        verificationStatus: { $in: ["pending_review", "reapplication"] },
+      }).lean();
+
+      const userIds = profiles.map((p) => p.userId.toString());
+      const users = await User.find({ _id: { $in: userIds } }).lean();
+      const userMap = Object.fromEntries(
+        users.map((u) => [u._id.toString(), u]),
+      );
+
+      const students = profiles.map((p) => ({
+        id: p._id.toString(),
+        userId: p.userId.toString(),
+        name: userMap[p.userId.toString()]?.name || "",
+        email: userMap[p.userId.toString()]?.email || "",
+        city: userMap[p.userId.toString()]?.city || "",
+        cnic: userMap[p.userId.toString()]?.cnic || "",
+        avatarUrl: userMap[p.userId.toString()]?.avatarUrl || "",
+        classLevel: p.classLevel || "",
+        institution: p.institution || "",
+        status: p.verificationStatus,
+        documents: p.documents,
+        verificationNotes: p.verificationNotes,
+        rejectedAt: p.rejectedAt,
+        submittedAt: p.updatedAt,
+      }));
+
+      sendSuccess({ res, data: { students } });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async approveStudent(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const { id } = req.params;
+      const profile = await StudentProfile.findByIdAndUpdate(
+        id,
+        { $set: { verificationStatus: "approved" } },
+        { new: true },
+      );
+      if (!profile) throw new NotFoundError("Student profile not found");
+      sendSuccess({ res, message: "Student approved" });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async rejectStudent(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const { id } = req.params;
+      const { reason } = req.body as { reason?: string };
+      const profile = await StudentProfile.findByIdAndUpdate(
+        id,
+        {
+          $set: {
+            verificationStatus: "rejected",
+            verificationNotes: reason || "Application rejected",
+            rejectedAt: new Date(),
+          },
+        },
+        { new: true },
+      );
+      if (!profile) throw new NotFoundError("Student profile not found");
+      sendSuccess({ res, message: "Student rejected" });
+    } catch (err) {
+      next(err);
+    }
+  },
+
   async getAllRequests(
     req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void> {
     try {
-      const requests = await TutorRequest.find()
+      const { status, search } = req.query;
+      const filter: Record<string, any> = {};
+      if (status && status !== "all") filter.status = status;
+      if (search) {
+        const re = { $regex: search as string, $options: "i" };
+        filter.$or = [{ studentName: re }, { tutorName: re }, { subject: re }];
+      }
+      const requests = await TutorRequest.find(filter)
         .sort({ createdAt: -1 })
         .lean({ virtuals: true });
       sendSuccess({ res, data: { requests } });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async acceptRequest(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const { id } = req.params;
+      const request = await TutorRequest.findByIdAndUpdate(
+        id,
+        { $set: { status: "approved" } },
+        { new: true },
+      );
+      if (!request) throw new NotFoundError("Request not found");
+      sendSuccess({ res, message: "Request accepted" });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async rejectRequest(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const { id } = req.params;
+      const request = await TutorRequest.findByIdAndUpdate(
+        id,
+        { $set: { status: "rejected" } },
+        { new: true },
+      );
+      if (!request) throw new NotFoundError("Request not found");
+      sendSuccess({ res, message: "Request rejected" });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  async deleteRequest(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const { id } = req.params;
+      const request = await TutorRequest.findByIdAndDelete(id);
+      if (!request) throw new NotFoundError("Request not found");
+      sendSuccess({ res, message: "Request deleted" });
     } catch (err) {
       next(err);
     }
@@ -444,7 +589,7 @@ export const adminController = {
   ): Promise<void> {
     try {
       const { id } = req.params;
-      const course = await courseRepository.adminUpdate(id, req.body);
+      const course = await courseRepository.adminUpdate(id as string, req.body);
       if (!course) throw new NotFoundError("Course not found");
       sendSuccess({
         res,
@@ -463,7 +608,7 @@ export const adminController = {
   ): Promise<void> {
     try {
       const { id } = req.params;
-      const deleted = await courseRepository.adminDelete(id);
+      const deleted = await courseRepository.adminDelete(id as string);
       if (!deleted) throw new NotFoundError("Course not found");
       sendSuccess({ res, message: "Course deleted" });
     } catch (err) {

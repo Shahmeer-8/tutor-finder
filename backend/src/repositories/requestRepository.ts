@@ -5,15 +5,29 @@ import {
 } from "../models/TutorRequest.js";
 import type { Types } from "mongoose";
 
+export interface ISlot {
+  day: string;
+  startTime: string;
+  endTime: string;
+}
+export interface IAddress {
+  city: string;
+  fullAddress: string;
+}
+
 export interface RequestCreateInput {
   studentId: string;
   tutorId: string;
+  courseId?: string;
   studentName: string;
   tutorName: string;
   tutorAvatarUrl?: string;
   subject: string;
   level: string;
-  mode: "online" | "home" | "both";
+  mode: "online" | "home";
+  selectedSlot?: ISlot;
+  meetingLink?: string;
+  homeAddress?: IAddress;
   message: string;
   fee: number;
   scheduledAt?: Date;
@@ -22,7 +36,10 @@ export interface RequestCreateInput {
 export interface RequestUpdateInput {
   subject?: string;
   level?: string;
-  mode?: "online" | "home" | "both";
+  mode?: "online" | "home";
+  selectedSlot?: ISlot;
+  meetingLink?: string;
+  homeAddress?: IAddress;
   message?: string;
   fee?: number;
   scheduledAt?: Date;

@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import { TutorProfile } from "../models/TutorProfile.js";
 import { User } from "../models/User.js";
+import { Course } from "../models/Course.js";
 import { sendSuccess } from "../utils/response.js";
 import { NotFoundError } from "../utils/errors.js";
 
@@ -26,11 +27,9 @@ export const tutorSearchController = {
       // Build profile filter
       const profileFilter: Record<string, any> = {};
 
-      // Only filter by approved status when explicitly requested
-      if (verified === "true") {
-        profileFilter.verificationStatus = "approved";
-        profileFilter.isProfileComplete = true;
-      }
+      // Always show only verified tutors in public search
+      profileFilter.verificationStatus = "approved";
+      profileFilter.isProfileComplete = true;
 
       if (subject) {
         profileFilter.subjects = { $regex: subject as string, $options: "i" };
@@ -90,8 +89,17 @@ export const tutorSearchController = {
             levels: p.levels || [],
             level: (p.levels || [])[0] || "",
             tutoringType: p.tutoringType,
-            online: p.tutoringType === "online" || p.tutoringType === "both",
-            homeVisit: p.tutoringType === "home" || p.tutoringType === "both",
+            teachingModes: p.teachingModes || [],
+            availability: p.availability || { online: [], home: [] },
+            homeTuitionCities: p.homeTuitionCities || [],
+            online:
+              (p.teachingModes || []).includes("online") ||
+              p.tutoringType === "online" ||
+              p.tutoringType === "both",
+            homeVisit:
+              (p.teachingModes || []).includes("home") ||
+              p.tutoringType === "home" ||
+              p.tutoringType === "both",
             hourlyRate: p.hourlyRate || 0,
             experience: p.experience || 0,
             qualification: p.qualification || "",
@@ -139,10 +147,17 @@ export const tutorSearchController = {
         levels: profile.levels,
         level: profile.levels[0] || "",
         tutoringType: profile.tutoringType,
+        teachingModes: (profile as any).teachingModes || [],
+        availability: (profile as any).availability || { online: [], home: [] },
+        homeTuitionCities: (profile as any).homeTuitionCities || [],
         online:
-          profile.tutoringType === "online" || profile.tutoringType === "both",
+          ((profile as any).teachingModes || []).includes("online") ||
+          profile.tutoringType === "online" ||
+          profile.tutoringType === "both",
         homeVisit:
-          profile.tutoringType === "home" || profile.tutoringType === "both",
+          ((profile as any).teachingModes || []).includes("home") ||
+          profile.tutoringType === "home" ||
+          profile.tutoringType === "both",
         hourlyRate: profile.hourlyRate || 0,
         experience: profile.experience || 0,
         qualification: profile.qualification || "",
@@ -156,7 +171,14 @@ export const tutorSearchController = {
         verificationStatus: profile.verificationStatus,
       };
 
-      sendSuccess({ res, data: { tutor: normalized } });
+      const courses = await Course.find({
+        tutorId: profile.userId,
+        isActive: true,
+      })
+        .sort({ createdAt: -1 })
+        .lean();
+
+      sendSuccess({ res, data: { tutor: { ...normalized, courses } } });
     } catch (err) {
       next(err);
     }

@@ -12,6 +12,9 @@ export interface TutorProfileUpdate {
   subjects?: string[];
   levels?: string[];
   tutoringType?: "online" | "home" | "both";
+  teachingModes?: string[];
+  availability?: { online: any[]; home: any[] };
+  homeTuitionCities?: string[];
   hourlyRate?: number;
   experience?: number;
   qualification?: string;
@@ -68,7 +71,7 @@ export const profileService = {
   async updateTutorProfile(
     userId: string,
     userUpdate: UserUpdate,
-    profileUpdate: TutorProfileUpdate
+    profileUpdate: TutorProfileUpdate,
   ): Promise<{ user: IUser; profile: ITutorProfile }> {
     const [user, profile] = await Promise.all([
       userRepository.updateById(userId, userUpdate),
@@ -78,7 +81,9 @@ export const profileService = {
 
     const isComplete = checkTutorProfileComplete(profile);
     if (isComplete !== profile.isProfileComplete) {
-      await tutorProfileRepository.updateByUserId(userId, { isProfileComplete: isComplete });
+      await tutorProfileRepository.updateByUserId(userId, {
+        isProfileComplete: isComplete,
+      });
       profile.isProfileComplete = isComplete;
     }
 
@@ -88,7 +93,7 @@ export const profileService = {
   async updateStudentProfile(
     userId: string,
     userUpdate: UserUpdate,
-    profileUpdate: StudentProfileUpdate
+    profileUpdate: StudentProfileUpdate,
   ): Promise<{ user: IUser; profile: IStudentProfile }> {
     const [user, profile] = await Promise.all([
       userRepository.updateById(userId, userUpdate),
@@ -98,7 +103,9 @@ export const profileService = {
 
     const isComplete = checkStudentProfileComplete(profile);
     if (isComplete !== profile.isProfileComplete) {
-      await studentProfileRepository.updateByUserId(userId, { isProfileComplete: isComplete });
+      await studentProfileRepository.updateByUserId(userId, {
+        isProfileComplete: isComplete,
+      });
       profile.isProfileComplete = isComplete;
     }
 
@@ -113,24 +120,38 @@ export const profileService = {
       uploadService.deleteFile(user.avatarPublicId).catch(() => {});
     }
 
-    const { url, publicId } = await uploadService.uploadAvatar(fileBuffer, userId);
-    await userRepository.updateById(userId, { avatarUrl: url, avatarPublicId: publicId });
+    const { url, publicId } = await uploadService.uploadAvatar(
+      fileBuffer,
+      userId,
+    );
+    await userRepository.updateById(userId, {
+      avatarUrl: url,
+      avatarPublicId: publicId,
+    });
     return url;
   },
 
   async uploadTutorDocument(
     userId: string,
     docType: string,
-    fileBuffer: Buffer
+    fileBuffer: Buffer,
   ): Promise<{ url: string; publicId: string }> {
-    const { url, publicId } = await uploadService.uploadDocument(fileBuffer, userId, docType);
+    const { url, publicId } = await uploadService.uploadDocument(
+      fileBuffer,
+      userId,
+      docType,
+    );
 
     const profile = await tutorProfileRepository.findByUserId(userId);
     if (!profile) throw new NotFoundError("Tutor profile not found");
 
-    const existingIdx = profile.documents.findIndex((d) => d.docType === docType);
+    const existingIdx = profile.documents.findIndex(
+      (d) => d.docType === docType,
+    );
     if (existingIdx >= 0) {
-      uploadService.deleteFile(profile.documents[existingIdx].publicId).catch(() => {});
+      uploadService
+        .deleteFile(profile.documents[existingIdx].publicId)
+        .catch(() => {});
       profile.documents[existingIdx] = {
         docType: docType as ITutorProfile["documents"][0]["docType"],
         url,
@@ -146,23 +167,33 @@ export const profileService = {
       });
     }
 
-    await tutorProfileRepository.updateByUserId(userId, { documents: profile.documents });
+    await tutorProfileRepository.updateByUserId(userId, {
+      documents: profile.documents,
+    });
     return { url, publicId };
   },
 
   async uploadStudentDocument(
     userId: string,
     docType: string,
-    fileBuffer: Buffer
+    fileBuffer: Buffer,
   ): Promise<{ url: string; publicId: string }> {
-    const { url, publicId } = await uploadService.uploadDocument(fileBuffer, userId, docType);
+    const { url, publicId } = await uploadService.uploadDocument(
+      fileBuffer,
+      userId,
+      docType,
+    );
 
     const profile = await studentProfileRepository.findByUserId(userId);
     if (!profile) throw new NotFoundError("Student profile not found");
 
-    const existingIdx = profile.documents.findIndex((d) => d.docType === docType);
+    const existingIdx = profile.documents.findIndex(
+      (d) => d.docType === docType,
+    );
     if (existingIdx >= 0) {
-      uploadService.deleteFile(profile.documents[existingIdx].publicId).catch(() => {});
+      uploadService
+        .deleteFile(profile.documents[existingIdx].publicId)
+        .catch(() => {});
       profile.documents[existingIdx] = {
         docType: docType as IStudentProfile["documents"][0]["docType"],
         url,
@@ -178,7 +209,9 @@ export const profileService = {
       });
     }
 
-    await studentProfileRepository.updateByUserId(userId, { documents: profile.documents });
+    await studentProfileRepository.updateByUserId(userId, {
+      documents: profile.documents,
+    });
     return { url, publicId };
   },
 };

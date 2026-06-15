@@ -1,5 +1,11 @@
 import { Course, ICourse } from "../models/Course.js";
 
+export interface ICourseSlot {
+  day: string;
+  startTime: string;
+  endTime: string;
+}
+
 export interface CourseCreateInput {
   tutorId: string;
   title: string;
@@ -9,6 +15,7 @@ export interface CourseCreateInput {
   fee: number;
   mode: "online" | "home" | "both";
   duration: string;
+  availability?: { online: ICourseSlot[]; home: ICourseSlot[] };
 }
 
 export interface CourseUpdateInput {
@@ -19,6 +26,7 @@ export interface CourseUpdateInput {
   fee?: number;
   mode?: "online" | "home" | "both";
   duration?: string;
+  availability?: { online: ICourseSlot[]; home: ICourseSlot[] };
   isActive?: boolean;
 }
 

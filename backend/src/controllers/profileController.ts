@@ -52,6 +52,9 @@ export const profileController = {
         subjects,
         levels,
         tutoringType,
+        teachingModes,
+        availability,
+        homeTuitionCities,
         hourlyRate,
         experience,
         qualification,
@@ -67,12 +70,28 @@ export const profileController = {
       };
 
       if (req.userRole === "tutor") {
+        const modes = teachingModes as string[] | undefined;
+        const derivedType =
+          modes && modes.length === 2
+            ? "both"
+            : modes && modes[0] === "home"
+              ? "home"
+              : "online";
+
         const profileUpdate = {
           ...(bio !== undefined && { bio: bio as string }),
           ...(subjects && { subjects: subjects as string[] }),
           ...(levels && { levels: levels as string[] }),
           ...(tutoringType && {
             tutoringType: tutoringType as "online" | "home" | "both",
+          }),
+          ...(modes && {
+            teachingModes: modes,
+            tutoringType: derivedType as "online" | "home" | "both",
+          }),
+          ...(availability !== undefined && { availability }),
+          ...(homeTuitionCities && {
+            homeTuitionCities: homeTuitionCities as string[],
           }),
           ...(hourlyRate !== undefined && { hourlyRate: Number(hourlyRate) }),
           ...(experience !== undefined && { experience: Number(experience) }),
