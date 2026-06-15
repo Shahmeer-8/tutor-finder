@@ -1,5 +1,5 @@
 "use client";
-import Unauthorized from "@/pages/Unauthorized";
+import Unauthorized from "@/views/Unauthorized";
 export default function Page() {
   return <Unauthorized />;
 }
